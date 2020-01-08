@@ -1,6 +1,6 @@
 ![](https://github.com/FISCO-BCOS/FISCO-BCOS/raw/master/docs/images/FISCO_BCOS_Logo.svg?sanitize=true)
 
-# FISCO BCOS 技术文档
+# FISCO BCOS 质量管理文档
 
 本版本的技术文档只适用FISCO BCOS 2.0及以上版本，FISCO BCOS 1.3.x版本的技术文档请查看[1.3系列技术文档](https://fisco-bcos-documentation.readthedocs.io/zh_CN/release-1.3/)。
 
