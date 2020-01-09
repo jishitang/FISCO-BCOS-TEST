@@ -5,7 +5,7 @@
 
 
      **记账节点**
-      - `FISCO BCOS v2.2.0 <./2_2_0.html>`_
+      
 
 .. admonition:: `FISCO BCOS 2.1.0 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.1.0>`_
 
