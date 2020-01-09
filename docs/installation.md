@@ -144,7 +144,7 @@ info|2019-01-21 17:23:36.592280| [g:1][p:264][CONSENSUS][SEALER]++++++++++++++++
 info|2019-01-21 17:23:40.612241| [g:1][p:264][CONSENSUS][SEALER]++++++++++++++++Generating seal on,blkNum=1,tx=0,myIdx=2,hash=49d0e830...
 ```
 
-## 配置及使用控制台
+## 交易
 
 在控制台通过Web3SDK链接FISCO BCOS节点，实现**查询区块链状态、部署调用合约**等功能，能够快速获取到所需要的信息。  
 控制台指令详细介绍[参考这里](manual/console.md)。
@@ -249,7 +249,7 @@ Type 'help' or 'h' for help. Type 'quit' or 'q' to quit console.
 ]
 ```
 
-## 部署及调用HelloWorld合约
+## 合约命名服务
 
 ### HelloWorld合约
 
