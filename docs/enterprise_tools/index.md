@@ -71,8 +71,4 @@ FISCO BCOS generator从上述背景出发，根据灵活、安全、易用、对
    :maxdepth: 1
 
    tutorial_one_click.md
-   tutorial_detail_operation.md
-   installation.md
-   config.md
-   operation.md
 ```
