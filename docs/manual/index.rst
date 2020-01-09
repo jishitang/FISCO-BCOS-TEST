@@ -10,23 +10,7 @@
 
    get_executable.md
    hardware_requirements.md
-   build_chain.md
-   certificates.md
-   configuration.md
-   group_use_cases.md 
-   distributed_storage.md
-   console.md
-   account.md
-   amop_protocol.md
-   smart_contract.md
-   transaction_parallel.md
-   node_management.md
-   permission_control.md
-   certificate_list.md
-   storage_security.md
-   guomi_crypto.md
-   log_description.md
-   caliper.md
+   
 
 
 .. admonition:: 区块链部署
