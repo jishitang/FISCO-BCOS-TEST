@@ -49,7 +49,7 @@ repositories {
 ```
 **注：** 如果下载Web3SDK的依赖`solcJ-all-0.4.25.jar`速度过慢，可以[参考这里](../manual/console.html#jar)进行下载。
 
-# 节点与周边组件兼容
+# 周边组件兼容
 
 ### FISCO BCOS节点证书配置
 
