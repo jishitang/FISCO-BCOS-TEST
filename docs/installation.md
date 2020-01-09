@@ -1,8 +1,8 @@
-# 安装
+# 合约交易
 
 本章介绍FISCO BCOS所需的必要安装和配置。本章通过在单机上部署一条4节点的FISCO BCOS联盟链，帮助用户掌握FISCO BCOS部署流程。请[根据这里](./manual/hardware_requirements.md)使用支持的**硬件和平台**操作。
 
-## 单群组FISCO BCOS联盟链的搭建
+## 合约
 
 本节以搭建单群组FISCO BCOS链为例操作。使用`build_chain.sh`脚本在本地搭建一条**4 节点**的FISCO BCOS链，以`Ubuntu 16.04 64bit`系统为例操作。
 
@@ -14,7 +14,7 @@
     - 本节使用预编译的静态`fisco-bcos`二进制文件，在CentOS 7和Ubuntu 16.04 64bit上经过测试。
 ```
 
-### 准备环境
+### 交易
 
 - 安装依赖
 
@@ -37,7 +37,7 @@ cd ~ && mkdir -p fisco && cd fisco
 curl -LO https://github.com/FISCO-BCOS/FISCO-BCOS/releases/download/v2.2.0/build_chain.sh && chmod u+x build_chain.sh
 ```
 
-### 搭建单群组4节点联盟链
+### 合约命名服务（CNS）
 
 在fisco目录下执行下面的指令，生成一条单群组4节点的FISCO链。  
 请确保机器的`30300~30303，20200~20203，8545~8548`端口没有被占用。
