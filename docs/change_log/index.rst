@@ -17,7 +17,7 @@
      **游离节点**
       
 
-.. admonition:: `FISCO BCOS 2.0.0-rc3 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.0.0-rc3>`_
+.. admonition:: `不共识、不同步，但具备入网条件`_
 
      
 
