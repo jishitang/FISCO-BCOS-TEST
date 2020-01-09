@@ -1,4 +1,4 @@
-# 硬件要求
+# RAFT算法
 
 ```eval_rst
 .. note::
