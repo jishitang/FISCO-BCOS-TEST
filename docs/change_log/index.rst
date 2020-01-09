@@ -1,20 +1,19 @@
 ##############################################################
-版本及兼容
+节点管理
 ##############################################################
 
-.. admonition:: `FISCO BCOS 2.2.0 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.2.0>`_
 
-     **变更描述、兼容及升级说明**
+     **记账节点**
       - `FISCO BCOS v2.2.0 <./2_2_0.html>`_
 
 .. admonition:: `FISCO BCOS 2.1.0 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.1.0>`_
 
-     **变更描述、兼容及升级说明**
+     **观察节点**
       - `FISCO BCOS v2.1.0 <./2_1_0.html>`_
 
 .. admonition:: `FISCO BCOS 2.0.0 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.0.0>`_
 
-     **变更描述、兼容及升级说明**
+     **游离节点**
       - `FISCO BCOS v2.0.0 <./2_0_0.html>`_
 
 .. admonition:: `FISCO BCOS 2.0.0-rc3 <https://github.com/FISCO-BCOS/FISCO-BCOS/releases/tag/v2.0.0-rc3>`_
