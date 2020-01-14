@@ -32,19 +32,19 @@ FISCO BCOS 是一个稳定、高效、安全的区块链底层平台，经过多
 
 - 从产品视角
    
-   **FISCO BCOS底层**   
+    FISCO BCOS底层    
    
-   **WeBase平台**     
+    WeBase平台      
    
-   **WeFamily应用**   
+    WeFamily应用    
 
 - 从操作层面
    
-   **功能性测试**
+    功能性测试 
    
-   **自动化工厂**
+    自动化工厂 
    
-   **非功能性测试（DFX）**  
+    非功能性测试（DFX） 
 
 .. toctree::
    :hidden:
