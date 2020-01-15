@@ -1,4 +1,4 @@
-![](https://github.com/FISCO-BCOS/FISCO-BCOS/raw/master/docs/images/FISCO_BCOS_QM_Logo.svg?sanitize=true)
+![](https://github.com/jishitang/FISCO-BCOS-TEST/raw/master/docs/images/FISCO_BCOS_QM_Logo.svg?sanitize=true)
 
 # FISCO BCOS 质量管理文档
 
