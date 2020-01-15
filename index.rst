@@ -4,7 +4,7 @@ FISCO BCOS 质量管理
 
 .. image:: _static/images/FISCO_BCOS_QM_Logo.svg
 
-FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口、每一个特性的稳定性都可能影响到上层应用。一个稳定、高效、安全的区块链底层平台，必须要有一套覆盖面全、触达点深、全模块联通的完整质量管理系统。
+FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口、每一个特性的稳定性都可能影响到上层应用。一个稳定、高效、安全的区块链底层平台，必须要有一套覆盖面全、触达点深、全模块联通的完整质量系统进行管理。
 
 - `环境搭建 <https://github.com/FISCO-BCOS/FISCO-BCOS>`_   
 - `连接 <http://mp.weixin.qq.com/mp/homepage?__biz=MzU5NTg0MjA4MA==&hid=9&sn=7edf9a62a2f45494671c91f0608db903&scene=18#wechat_redirect>`_  
