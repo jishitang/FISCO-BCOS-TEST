@@ -13,7 +13,7 @@
    
 
 
-.. admonition:: 区块链部署
+.. admonition:: PBFT算法
 
     - `获取可执行程序 <./get_executable.html>`_
         + 下载二进制、docker镜像或手动编译
@@ -29,7 +29,7 @@
         + 分布式存储的配置指导
 
 
-.. admonition:: 外部调用
+.. admonition:: RAFT算法
 
     - `控制台 <./console.html>`_
         + 详细的控制台配置和使用说明
