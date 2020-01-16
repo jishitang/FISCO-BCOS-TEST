@@ -1,4 +1,4 @@
-# 数据兼容
+
 
 [Web3SDK](https://github.com/FISCO-BCOS/web3sdk)可以支持访问节点、查询节点状态、修改系统设置和发送交易等功能。该版本（2.0）的技术文档只适用Web3SDK 2.0及以上版本(与FISCO BCOS 2.0及以上版本适配)，1.2.x版本的技术文档请查看[Web3SDK 1.2.x版本技术文档](https://fisco-bcos-documentation.readthedocs.io/zh_CN/release-1.3/docs/web3sdk/config_web3sdk.html)。
 
@@ -9,7 +9,7 @@
 - 支持[链上信使协议](../manual/amop_protocol.md)为联盟链提供安全高效的消息信道
 - 支持使用国密算法发送交易
 
-## 底层兼容
+# 底层兼容
 
 ```eval_rst
 .. important::
@@ -23,10 +23,10 @@
 
 ```
 
-### 数据兼容
-### 组网
+## 数据兼容
+## 组网
 
-### 操作系统
+## 操作系统
 
    通过gradle或maven引入SDK到java应用
 
@@ -52,17 +52,17 @@ repositories {
 ```
 **注：** 如果下载Web3SDK的依赖`solcJ-all-0.4.25.jar`速度过慢，可以[参考这里](../manual/console.html#jar)进行下载。
 
-## 周边组件兼容
+# 周边组件兼容
 
-### SDK
+## SDK
 
 FISCO BCOS作为联盟链，其SDK连接区块链节点需要通过证书(ca.crt、sdk.crt)和私钥(sdk.key)进行双向认证。因此需要将节点所在目录`nodes/${ip}/sdk`下的`ca.crt`、`sdk.crt`和`sdk.key`文件拷贝到项目的资源目录，供SDK与节点建立连接时使用。（低于2.1版本的FISCO BCOS节点目录下只有`node.crt`和`node.key`，需将其重命名为`sdk.crt`和`sdk.key`以兼容最新的SDK）
 
-### 控制台
+## 控制台
 
 Java应用的配置文件需要做相关配置。值得关注的是，FISCO BCOS 2.0+版本支持[多群组功能](../design/architecture/group.md)，SDK需要配置群组的节点信息。将以Spring项目和Spring Boot项目为例，提供配置指引。
 
-### 浏览器
+## 浏览器
 
 提供Spring项目中关于`applicationContext.xml`的配置下所示。
 ```xml
@@ -137,7 +137,7 @@ Java应用的配置文件需要做相关配置。值得关注的是，FISCO BCOS
 - 进入setting->Plugins->Marketplace->选择安装Lombok plugin 　　　　　　
 - 进入设置Setting-> Compiler -> Annotation Processors -> 勾选Enable annotation processing。
 
-### 应用 
+## 应用 
 
 sset.registerRegisterEventEventLogFilter(fromBlock,toBlock,otherTopics,callback);
 ```
