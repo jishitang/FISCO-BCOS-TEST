@@ -43,7 +43,7 @@ FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口�
    
    自动化工厂 
    
-   专项测试（DFX） 
+   DFX专项测试 
 
 .. toctree::
    :hidden:
