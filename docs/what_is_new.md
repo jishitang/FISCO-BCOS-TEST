@@ -67,9 +67,4 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 
 ## 兼容性
 
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-   :caption: 功能验证
-
-   docs/what_is_new.md
+<font color=Red>**参照fisco bcos doc段落布局**</font>
