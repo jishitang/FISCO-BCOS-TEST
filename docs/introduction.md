@@ -1,5 +1,18 @@
 # 文档结构
 
+区块链质量框架主要包括功能验证、性能测试、安全性测试、稳定和可靠性测试、专项测试、以及自动化测试
+
+## - [功能验证](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/what_is_new.html)
+
+功能验证是将区块链的所有功能特性提供测试方案，从建链、交易、共识等链相关的特性，
+
+## - [性能测试](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/change_log/index.html)
+
+作为一个底层平台，性能指标至关重要，决定了业务承载量，从工具准备、参数配置，到性能分析及报告
+
+## - [安全测试](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/installation.html)
+
+
 FISCO BCOS系统当前包括区块链底层、中间件平台及业务应用三大块，基本上涵盖了一个完整系统后端服务的所有模块。整个质量框架也是基于这三大块的内容，从功能测试到DFX专项测试，最后收于自动化工厂的三层循环模式，这三层之间的关系也是相互影响、相互促进，缺一不可。
 
 
