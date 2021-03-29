@@ -12,6 +12,18 @@
 
 ### - [安全测试](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/installation.html)
 
+接口调用，IP端口访问，用户权限等方面展开
+
+### - [稳定和可靠性](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/tutorial/index.html)
+
+包括7*24小时长时间业务批跑，外部网络、磁盘等硬件条件干扰
+
+### - [专项测试](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/manual/index.html)
+
+
+
+### - [自动化工厂](https://fisco-bcos-test.readthedocs.io/zh_CN/dev/docs/enterprise_tools/index.html)
+
 
 FISCO BCOS系统当前包括区块链底层、中间件平台及业务应用三大块，基本上涵盖了一个完整系统后端服务的所有模块。整个质量框架也是基于这三大块的内容，从功能测试到DFX专项测试，最后收于自动化工厂的三层循环模式，这三层之间的关系也是相互影响、相互促进，缺一不可。
 
