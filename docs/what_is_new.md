@@ -50,14 +50,15 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 
 ### 节点间P2P连接
 FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：
-    node.key（节点密钥，ECC格式）<br>
-    node.crt（节点证书，由CA颁发）<br>
-    ca.crt（CA证书，由CA机构提供）<br>
+>>node.key（节点密钥，ECC格式）<br>
+>>node.crt（节点证书，由CA颁发）<br>
+>>ca.crt（CA证书，由CA机构提供）<br>
 FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。
 
 #### 配置
 节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
-```[lifang@VM_153_29_centos node0]$ cat config.ini 
+```
+[lifang@VM_153_29_centos node0]$ cat config.ini 
 [p2p]
     listen_ip=0.0.0.0
     listen_port=20801
@@ -70,12 +71,13 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
     node.5=172.16.153.21:20802
     node.6=172.16.153.45:20801
 ```
-listen_ip:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。为便于开发和体验，build_chain脚本搭链时默认配置是 0.0.0.0 ，出于安全考虑，应根据实际业务网络情况，修改为特定的监听地址。<br>
-listen_port：P2P端口，用于区块链节点之间的互联，包括机构内的多个节点，以及多机构间节点和节点的互联。<br>
-node.x：跟该节点有P2P连接的所有节点。<br>
+- `listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。为便于开发和体验，build_chain脚本搭链时默认配置是 0.0.0.0 ，出于安全考虑，应根据实际业务网络情况，修改为特定的监听地址。<br>
+- `listen_port`：P2P端口，用于区块链节点之间的互联，包括机构内的多个节点，以及多机构间节点和节点的互联。<br>
+- `node.x`：跟该节点有P2P连接的所有节点。<br>
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
-```[lifang@VM_153_29_centos log]$ cat log_2021040814.00.log |grep P2P<br>
+```
+[lifang@VM_153_29_centos log]$ cat log_2021040814.00.log |grep P2P<br>
 debug|2021-04-08 14:42:36.160654|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20801,nodeID=ae6970c8...
 debug|2021-04-08 14:42:36.160678|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20802,nodeID=34f0aa07...
 debug|2021-04-08 14:42:36.160686|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20803,nodeID=2ffa186b...
@@ -87,7 +89,8 @@ info|2021-04-08 14:42:36.160717|[P2P][Service] heartBeat,connected count=6
 ```
 
 也可通过listen_port监听查看节点间连接：<br>
-```[lifang@VM_153_29_centos log]$ lsof -i:20801
+```
+[lifang@VM_153_29_centos log]$ lsof -i:20801
 COMMAND     PID   USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
 fisco-bco 40752 lifang    8u  IPv4  80950915      0t0  TCP *:20801 (LISTEN)
 fisco-bco 40752 lifang    9u  IPv4  80980176      0t0  TCP VM_153_29_centos:20801->172.16.153.20:63384 (ESTABLISHED)
@@ -106,7 +109,8 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
 
 #### 配置
 节点侧连接配置如下：<br>
-```[lifang@VM_153_29_centos node0]$ cat config.ini 
+```
+[lifang@VM_153_29_centos node0]$ cat config.ini 
 [rpc]
     channel_listen_ip=0.0.0.0
     channel_listen_port=20810
@@ -120,7 +124,8 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     jsonrpc_listen_port：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
     
  客户端侧配置，此处以Java sdk为例（console也类似），客户端的config.toml中network部分配置节点连接信息：
-```[lifang@master-153-45 conf]$ cat config.toml 
+```
+[lifang@master-153-45 conf]$ cat config.toml 
 [network]
 peers=["172.16.153.29:30815", "172.16.153.21:30816"]
 ```
