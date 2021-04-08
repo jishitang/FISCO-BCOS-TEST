@@ -53,9 +53,9 @@ FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能
 >>node.key（节点密钥，ECC格式）<br>
 >>node.crt（节点证书，由CA颁发）<br>
 >>ca.crt（CA证书，由CA机构提供）<br>
+
 FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。
 
-#### 配置
 节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
 ```
 [lifang@VM_153_29_centos node0]$ cat config.ini 
@@ -101,13 +101,9 @@ fisco-bco 40752 lifang   14u  IPv4 168737867      0t0  TCP VM_153_29_centos:2080
 fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:20801->172.16.153.45:41316 (ESTABLISHED)
 ```
 
-#### 测试
-
-
 ### 客户端与节点连接
 FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的SDK来调用这些接口。在测试工作中涉及到的客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。
 
-#### 配置
 节点侧连接配置如下：<br>
 ```
 [lifang@VM_153_29_centos node0]$ cat config.ini 
@@ -118,20 +114,32 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     jsonrpc_listen_port=8305
     disable_dynamic_group=false
 ```
-    channel_listen_ip：Channel监听IP，为方便节点和SDK跨服务器部署，搭链时默认配置为0.0.0.0的。实际应用场景中，应只监听内网地址，供机构内的其他客户端服务器通过SDK连接即可，避免出现安全问题。
-    channel_listen_port： Channel端口。
-    jsonrpc_listen_ip：RPC监听IP。
-    jsonrpc_listen_port：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
+- `channel_listen_ip`：Channel监听IP，为方便节点和SDK跨服务器部署，搭链时默认配置为0.0.0.0，表示监听本机的所有地址。实际应用场景中，最好只监听内网地址，供机构内的客户端服务器通过SDK连接即可，避免出现安全问题。
+- `channel_listen_port`： Channel端口。
+- `jsonrpc_listen_ip`：RPC监听IP。
+- `jsonrpc_listen_port`：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
     
- 客户端侧配置，此处以Java sdk为例（console也类似），客户端的config.toml中network部分配置节点连接信息：
+ 客户端侧配置如下，此处以Java sdk为例（console也类似），客户端的config.toml中network部分配置节点连接信息，此处可以配置连接一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port：
 ```
 [lifang@master-153-45 conf]$ cat config.toml 
 [network]
-peers=["172.16.153.29:30815", "172.16.153.21:30816"]
+peers=["172.16.153.29:20810", "172.16.153.21:20811"]
 ```
 
-
-#### 测试
+### 测试
+对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
+* 在客户端持续发送交易的过程中，不启动节点、频繁启停节点导致与其他节点频繁断开重连，观察整条链是否正常工作，leader节点是否正确，以及频繁启停节点时节点的资源使用率是否有较大变化。
+* 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高，是否影响节点间连接。
+* 节点所在服务器挂掉，进程被kill。
+* 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill -CONT PID命令恢复；也可通过一些故障工具模拟）。挂起后，进程由S变为T状态，节点没有时间片运行代码，不能正常处理业务。
+* 节点证书有误。
+* 节点间网络断连、网络延迟、网络闪断等。
+* 节点带宽过低。
+* 节点间内外网混合模式。
+* CA黑白名单。
+* 
+* 
+*  
 
 
 ## 共识算法
