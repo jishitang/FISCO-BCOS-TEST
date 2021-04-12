@@ -50,9 +50,9 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 
 ### 节点间P2P连接
 FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：
->>node.key（节点密钥，ECC格式）<br>
->>node.crt（节点证书，由CA颁发）<br>
->>ca.crt（CA证书，由CA机构提供）<br>
+>node.key（节点密钥，ECC格式）<br>
+>node.crt（节点证书，由CA颁发）<br>
+>ca.crt（CA证书，由CA机构提供）<br>
 
 FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。
 
@@ -77,7 +77,7 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
 ```
-[lifang@VM_153_29_centos log]$ cat log_2021040814.00.log |grep P2P<br>
+[lifang@VM_153_29_centos log]$ cat log_2021040814.00.log |grep P2P
 debug|2021-04-08 14:42:36.160654|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20801,nodeID=ae6970c8...
 debug|2021-04-08 14:42:36.160678|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20802,nodeID=34f0aa07...
 debug|2021-04-08 14:42:36.160686|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20803,nodeID=2ffa186b...
@@ -104,7 +104,7 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 ### 客户端与节点连接
 FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的SDK来调用这些接口。在测试工作中涉及到的客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。
 
-节点侧连接配置如下：<br>
+节点侧提供给客户端使用的连接配置如下：<br>
 ```
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [rpc]
@@ -119,28 +119,61 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
 - `jsonrpc_listen_ip`：RPC监听IP。
 - `jsonrpc_listen_port`：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
     
- 客户端侧配置如下，此处以Java sdk为例（console也类似），客户端的config.toml中network部分配置节点连接信息，此处可以配置连接一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port：
+ 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书。
+ 客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。
 ```
 [lifang@master-153-45 conf]$ cat config.toml 
 [network]
 peers=["172.16.153.29:20810", "172.16.153.21:20811"]
 ```
+客户端config.toml中cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key。证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
+
+```
+[lifang@master-153-45 conf]$ cat config.toml 
+[cryptoMaterial]
+
+certPath = "conf"                           # The certification path  
+
+# The following configurations take the certPath by default if commented
+# caCert = "conf/ca.crt"                    # CA cert file path
+                                            # If connect to the GM node, default CA cert path is ${certPath}/gm/gmca.crt
+
+# sslCert = "conf/sdk.crt"                  # SSL cert file path
+                                            # If connect to the GM node, the default SDK cert path is ${certPath}/gm/gmsdk.crt
+
+# sslKey = "conf/sdk.key"                   # SSL key file path
+                                            # If connect to the GM node, the default SDK privateKey path is ${certPath}/gm/gmsdk.key
+
+# enSslCert = "conf/gm/gmensdk.crt"         # GM encryption cert file path
+                                            # default load the GM SSL encryption cert from ${certPath}/gm/gmensdk.crt
+
+# enSslKey = "conf/gm/gmensdk.key"          # GM ssl cert file path
+                                            # default load the GM SSL encryption privateKey from ${certPath}/gm/gmensdk.key
+
+```
+
 
 ### 测试
 对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
 * 在客户端持续发送交易的过程中，不启动节点、频繁启停节点导致与其他节点频繁断开重连，观察整条链是否正常工作，leader节点是否正确，以及频繁启停节点时节点的资源使用率是否有较大变化。
-* 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高，是否影响节点间连接。
+* 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高，是否影响节点间连接。若节点进程未挂，但节点间连接异常，当资源使用率正常后，节点间连接应能自动恢复。若节点进程挂掉，重启节点后，节点应能正常工作。
 * 节点所在服务器挂掉，进程被kill。
 * 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill -CONT PID命令恢复；也可通过一些故障工具模拟）。挂起后，进程由S变为T状态，节点没有时间片运行代码，不能正常处理业务。
 * 节点证书有误。
-* 节点间网络断连、网络延迟、网络闪断等。
-* 节点带宽过低。
+* 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若客户端进来的交易TPS很高，网络断开的时间大于网络正常时间而且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。
+* 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。
 * 节点间内外网混合模式。
-* CA黑白名单。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有未配置在白名单中的节点连接。白名单为空表示不开启，接受任何连接。CA黑白名单特性需要验证：黑、白名单是否生效。对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点会拒绝除A,B,C外其他节点的连接，若该节点黑名单里同时配了A，则A也会被拒绝连接）。
+* CA黑白名单。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。白名单为空表示不开启，接受任何连接。CA黑白名单特性需要验证：黑、白名单是否生效。对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。
 
 * 
 * 
 *  
+
+
+
+实际现网运行的生产环境比测试环境要复杂很多，影响环境的因素众多，可能会遇到诸如网络抖动、节点各种异常等情况出现。无法完全避免各种异常的发生，但当各种故障解除后，系统应该能快速恢复可以正常使用。
+
+
 
 
 ## 共识算法
