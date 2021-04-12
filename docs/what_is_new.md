@@ -163,14 +163,57 @@ certPath = "conf"                           # The certification path
 * 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若客户端进来的交易TPS很高，网络断开的时间大于网络正常时间而且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。
 * 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。
 * 节点间内外网混合模式。
-* CA黑白名单。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。白名单为空表示不开启，接受任何连接。CA黑白名单特性需要验证：黑、白名单是否生效。对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。
+* CA黑白名单。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。白名单为空表示不开启，接受任何连接。CA黑白名单特性需要验证：黑、白名单是否生效。对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。节点的CA黑白名单配置如下：
+```
+[lifang@VM_153_29_centos node0]$ cat config.ini 
+[certificate_blacklist]
+    ; crl.0 should be nodeid, nodeid's length is 128
+    ;crl.0=
 
-* 
-* 
-*  
+[certificate_whitelist]
+    ; cal.0 should be nodeid, nodeid's length is 128
+    ;cal.0=
+```
+- `certificate_blacklist`：黑名单列表。
+- `certificate_whitelist`：白名单列表。
+
+对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
+* 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。
+* IP、Port正确性：IP/Port不存在、连接其他P2P Port、RPC Port等会导致create client失败。
+* 配置单个直连节点：
+>节点未启动、压测过程中启停节点，仅能断断续续处理交易。
+>节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。
+>节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。
+* 配置多个直连节点时：
+>客户端持续发送大量交易后，检查发送到每个直连节点的交易数是否均匀，能否达到负载均衡的目的。
+>多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。
+>只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。
+>客户端的交易不能发送到状态异常的直连节点（进程停止、进程暂停、游离直连节点）。
+>客户端的交易可以发送到观察直连节点。
+>多个直连节点属于相同group时，只要有一个直连节点正常工作，客户端发送的交易仍能被成功处理。
+* 客户端与直连节点之间网络延迟、闪断等异常。
+* SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。
+群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置:
+```
+[lifang@VM_153_29_centos conf]$ cat group.1.ini 
+[sdk_allowlist]
+    ; When sdk_allowlist is empty, all SDKs can connect to this node
+    ; when sdk_allowlist is not empty, only the SDK in the allowlist can connect to this node
+    ; public_key.0 should be nodeid, nodeid's length is 128
+    ;public_key.0=
+```
+其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。
+```
+[lifang@VM_153_29_centos sdk]$ cat sdk.publickey 
+09e545cfde50f3eb4db2c85b1d39baa7a10d5322eb5d412875df42b9052f3508a245c93017c73542ab0de565d41f79be01142eafd66d9233ca670cce0d4d8139
+```
+配置好sdk_allowlist后，可以执行bash node0/scripts/reload_sdk_allowlist.sh脚本使配置生效。这里需要验证：当sdk_allowlist列表数目为0时，节点没有开启SDK白名单控制功能，任意SDK均可访问该群组。若sdk_allowlist中有配置public_key，仅在sdk_allowlist中的客户端才能访问对应的群组（其他不在sdk_allowlist中的客户端访问会有诸如The SDK is not allowed to access this group类似错误提示信息）；以及白名单中public_key配置错误等场景。
 
 
 
+
+
+针对上述场景，可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l。
 实际现网运行的生产环境比测试环境要复杂很多，影响环境的因素众多，可能会遇到诸如网络抖动、节点各种异常等情况出现。无法完全避免各种异常的发生，但当各种故障解除后，系统应该能快速恢复可以正常使用。
 
 
