@@ -180,18 +180,18 @@ certPath = "conf"                           # The certification path
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
 * 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。
 * IP、Port正确性：IP/Port不存在、连接其他P2P Port、RPC Port等会导致create client失败。
-* 配置单个直连节点：
+* 配置单个直连节点：<br>
 节点未启动、压测过程中启停节点，仅能断断续续处理交易。<br>
 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。<br>
 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。
-* 配置多个直连节点时：
+* 配置多个直连节点时：<br>
 客户端持续发送大量交易后，检查发送到每个直连节点的交易数是否均匀，能否达到负载均衡的目的。<br>
 多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。<br>
 只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。<br>
 客户端的交易不能发送到状态异常的直连节点（进程停止、进程暂停、游离直连节点）。<br>
 客户端的交易可以发送到观察直连节点。<br>
 多个直连节点属于相同group时，只要有一个直连节点正常工作，客户端发送的交易仍能被成功处理。<br>
-针对上述场景，可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l。
+测试过程中可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l，其中172.16.153.29:20810为配置的直连节点。
 * 客户端与直连节点之间网络延迟、闪断等异常。
 * SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。<br>
 群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置:
