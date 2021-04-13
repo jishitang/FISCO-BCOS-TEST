@@ -71,9 +71,9 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
     node.5=172.16.153.21:20802
     node.6=172.16.153.45:20801
 ```
-- `listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。为便于开发和体验，build_chain脚本搭链时默认配置是 0.0.0.0 ，出于安全考虑，应根据实际业务网络情况，修改为特定的监听地址。<br>
-- `listen_port`：P2P端口，用于区块链节点之间的互联，包括机构内的多个节点，以及多机构间节点和节点的互联。<br>
-- `node.x`：跟该节点有P2P连接的所有节点。<br>
+`listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。为便于开发和体验，build_chain脚本搭链时默认配置是 0.0.0.0 ，出于安全考虑，应根据实际业务网络情况，修改为特定的监听地址。<br>
+`listen_port`：P2P端口，用于区块链节点之间的互联，包括机构内的多个节点，以及多机构间节点和节点的互联。<br>
+`node.x`：跟该节点有P2P连接的所有节点。<br>
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
 ```
@@ -114,10 +114,10 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     jsonrpc_listen_port=8305
     disable_dynamic_group=false
 ```
-- `channel_listen_ip`：Channel监听IP，为方便节点和SDK跨服务器部署，搭链时默认配置为0.0.0.0，表示监听本机的所有地址。实际应用场景中，最好只监听内网地址，供机构内的客户端服务器通过SDK连接即可，避免出现安全问题。
-- `channel_listen_port`： Channel端口。
-- `jsonrpc_listen_ip`：RPC监听IP。
-- `jsonrpc_listen_port`：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
+`channel_listen_ip`：Channel监听IP，为方便节点和SDK跨服务器部署，搭链时默认配置为0.0.0.0，表示监听本机的所有地址。实际应用场景中，最好只监听内网地址，供机构内的客户端服务器通过SDK连接即可，避免出现安全问题。
+`channel_listen_port`： Channel端口。
+`jsonrpc_listen_ip`：RPC监听IP。
+`jsonrpc_listen_port`：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。
     
  客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书。<br>
  客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。
@@ -174,8 +174,8 @@ certPath = "conf"                           # The certification path
     ; cal.0 should be nodeid, nodeid's length is 128
     ;cal.0=
 ```
-- `certificate_blacklist`：黑名单列表。
-- `certificate_whitelist`：白名单列表。
+`certificate_blacklist`：黑名单列表。
+`certificate_whitelist`：白名单列表。
 
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
 * 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。
