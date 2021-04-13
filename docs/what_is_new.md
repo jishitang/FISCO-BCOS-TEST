@@ -49,14 +49,9 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 区块链作为一个去中心化的分布式系统，由多个节点互相连接而成。链上的多个节点之间彼此连接，构成一个P2P网络，而连接也是各节点相互协作同步共识的前提条件。区块链中的连接主要包括节点间P2P连接、客户端与节点间连接。
 
 ### 节点间P2P连接
-FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：
->node.key（节点密钥，ECC格式）<br>
->node.crt（节点证书，由CA颁发）<br>
->ca.crt（CA证书，由CA机构提供）<br>
+FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：node.key（节点密钥，ECC格式）、node.crt（节点证书，由CA颁发）、ca.crt（CA证书，由CA机构提供）。
 
-FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。
-
-节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
+FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
 ```
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [p2p]
@@ -71,9 +66,7 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
     node.5=172.16.153.21:20802
     node.6=172.16.153.45:20801
 ```
-`listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。为便于开发和体验，build_chain脚本搭链时默认配置是 0.0.0.0 ，出于安全考虑，应根据实际业务网络情况，修改为特定的监听地址。<br>
-`listen_port`：P2P端口，用于区块链节点之间的互联，包括机构内的多个节点，以及多机构间节点和节点的互联。<br>
-`node.x`：跟该节点有P2P连接的所有节点。<br>
+`listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
 ```
@@ -114,10 +107,6 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     jsonrpc_listen_port=8305
     disable_dynamic_group=false
 ```
-`channel_listen_ip`：Channel监听IP，为方便节点和SDK跨服务器部署，搭链时默认配置为0.0.0.0，表示监听本机的所有地址。实际应用场景中，最好只监听内网地址，供机构内的客户端服务器通过SDK连接即可，避免出现安全问题。<br>
-`channel_listen_port`： Channel端口。<br>
-`jsonrpc_listen_ip`：RPC监听IP。<br>
-`jsonrpc_listen_port`：JSON-RPC端口。用户可以通过curl命令发送http post请求访问FISCO BCOS的JSON RPC接口。curl命令的url地址为jsonrpc_listen_ip和jsonrpc listen port端口。<br>
     
  客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书。<br>
  
@@ -153,7 +142,6 @@ certPath = "conf"                           # The certification path
 
 ```
 
-
 ### 测试
 对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
 + 在客户端持续发送交易的过程中，不启动节点、频繁启停节点导致与其他节点频繁断开重连，观察整条链是否正常工作，leader节点是否正确，以及频繁启停节点时节点的资源使用率是否有较大变化。<br/><br/>
@@ -164,19 +152,11 @@ certPath = "conf"                           # The certification path
 + 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若客户端进来的交易TPS很高，网络断开的时间大于网络正常时间而且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。<br/><br/>
 + 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。<br/><br/>
 + 节点间内外网混合模式。<br/><br/>
-+ CA黑白名单。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。白名单为空表示不开启，接受任何连接。CA黑白名单特性需要验证：黑、白名单是否生效。对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。节点的CA黑白名单配置如下：
-```
-[lifang@VM_153_29_centos node0]$ cat config.ini 
-[certificate_blacklist]
-    ; crl.0 should be nodeid, nodeid's length is 128
-    ;crl.0=
-
-[certificate_whitelist]
-    ; cal.0 should be nodeid, nodeid's length is 128
-    ;cal.0=
-```
-`certificate_blacklist`：黑名单列表。<br>
-`certificate_whitelist`：白名单列表。<br>
++ [CA黑白名单]（https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/certificate_list.html?highlight=CA%E9%BB%91%E5%90%8D%E5%8D%95)。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。
+    - 白名单为空时表示不开启该功能，接受任何连接。
+    - 配置黑名单，拒绝此NodeID节点发起的连接。
+    - 配置白名单，仅在白名单内的节点能连接。
+    - 对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。
 
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
 * 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。<br/><br/>
@@ -195,23 +175,11 @@ certPath = "conf"                           # The certification path
 测试过程中可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l，其中172.16.153.29:20810为配置的直连节点。<br/><br/>
 
 * 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
-* SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。<br/><br/>
-
-群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置:
-```
-[lifang@VM_153_29_centos conf]$ cat group.1.ini 
-[sdk_allowlist]
-    ; When sdk_allowlist is empty, all SDKs can connect to this node
-    ; when sdk_allowlist is not empty, only the SDK in the allowlist can connect to this node
-    ; public_key.0 should be nodeid, nodeid's length is 128
-    ;public_key.0=
-```
-其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。
-```
-[lifang@VM_153_29_centos sdk]$ cat sdk.publickey 
-09e545cfde50f3eb4db2c85b1d39baa7a10d5322eb5d412875df42b9052f3508a245c93017c73542ab0de565d41f79be01142eafd66d9233ca670cce0d4d8139
-```
-配置好sdk_allowlist后，可以执行bash node0/scripts/reload_sdk_allowlist.sh脚本使配置生效。这里需要验证：当sdk_allowlist列表数目为0时，节点没有开启SDK白名单控制功能，任意SDK均可访问该群组。若sdk_allowlist中有配置public_key，仅在sdk_allowlist中的客户端才能访问对应的群组（其他不在sdk_allowlist中的客户端访问会有诸如The SDK is not allowed to access this group类似错误提示信息）；以及白名单中public_key配置错误等场景。
+* SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。配置好sdk_allowlist后，可以执行bash node0/scripts/reload_sdk_allowlist.sh脚本使配置生效。此处需要验证：
+    - 当sdk_allowlist列表数目为0时，节点没有开启SDK白名单控制功能，任意SDK均可访问该群组。
+    - 若sdk_allowlist中有配置public_key，仅在sdk_allowlist中的客户端才能访问对应的群组。
+    - 其他不在sdk_allowlist中的客户端访问会有诸如The SDK is not allowed to access this group类似错误提示信息。
+    - 以及白名单中public_key配置错误等场景。
 
 实际现网运行的生产环境比测试环境要复杂很多，影响环境的因素众多，可能会遇到诸如网络抖动、节点各种异常等情况出现。无法完全避免各种异常的发生，但当各种故障解除后，系统应该能快速恢复可以正常使用。
 
