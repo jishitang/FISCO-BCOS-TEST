@@ -51,7 +51,7 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 ### 节点间P2P连接
 FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：node.key（节点密钥，ECC格式）、node.crt（节点证书，由CA颁发）、ca.crt（CA证书，由CA机构提供）。
 
-FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
+FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置（listen_ip若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。）：<br>
 ```
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [p2p]
@@ -66,7 +66,6 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
     node.5=172.16.153.21:20802
     node.6=172.16.153.45:20801
 ```
-`listen_ip`:节点间P2P连接监听IP。若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
 ```
@@ -108,16 +107,7 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     disable_dynamic_group=false
 ```
     
- 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书。<br>
- 
- 客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。
-```
-[lifang@master-153-45 conf]$ cat config.toml 
-[network]
-peers=["172.16.153.29:20810", "172.16.153.21:20811"]
-```
-客户端config.toml中cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key。证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
-
+ 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
 ```
 [lifang@master-153-45 conf]$ cat config.toml 
 [cryptoMaterial]
@@ -140,6 +130,8 @@ certPath = "conf"                           # The certification path
 # enSslKey = "conf/gm/gmensdk.key"          # GM ssl cert file path
                                             # default load the GM SSL encryption privateKey from ${certPath}/gm/gmensdk.key
 
+[network]
+peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connect
 ```
 
 ### 测试
@@ -164,18 +156,21 @@ certPath = "conf"                           # The certification path
     - 对同一节点同时配置黑白名单，黑名单的优先级高于白名单（如某节点白名单里配置了A，B，C，则该节点仅会跟ABC节点连接；若该节点黑名单里同时配了A，该节点也会拒绝A节点的连接）。
     - A节点配置B，B节点配置A。
 
+
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
-* 正常连接。
-* 
-* 
-* 
-* 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。<br/><br/>
-* IP、Port正确性：IP/Port不存在、连接其他P2P Port、RPC Port等会导致create client失败。<br/><br/>
-* 配置单个直连节点：<br>
++ 正常连接。
++ 非国密节点非国密连接
++ 国密节点非国密连接
++ 国密节点国密连接
++ 
++ 
++ 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。<br/><br/>
++ IP、Port正确性：IP/Port不存在、连接其他P2P Port、RPC Port等会导致create client失败。<br/><br/>
++ 配置单个直连节点：<br>
     - 节点未启动、压测过程中启停节点，仅能断断续续处理交易。<br>
     - 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。<br>
     - 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。<br/><br/>
-* 配置多个直连节点时：<br>
++ 配置多个直连节点时：<br>
     - 客户端持续发送大量交易后，检查发送到每个直连节点的交易数是否均匀，能否达到负载均衡的目的。<br>
     - 多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。<br>
     - 只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。<br>
@@ -184,8 +179,8 @@ certPath = "conf"                           # The certification path
     - 多个直连节点属于相同group时，只要有一个直连节点正常工作，客户端发送的交易仍能被成功处理。<br>
 测试过程中可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l，其中172.16.153.29:20810为配置的直连节点。<br/><br/>
 
-* 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
-* SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。配置好sdk_allowlist后，可以执行bash node0/scripts/reload_sdk_allowlist.sh脚本使配置生效。此处需要验证：
++ 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
++ SDK白名单：2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。配置好sdk_allowlist后，可以执行bash node0/scripts/reload_sdk_allowlist.sh脚本使配置生效。此处需要验证：
     - 当sdk_allowlist列表数目为0时，节点没有开启SDK白名单控制功能，任意SDK均可访问该群组。
     - 若sdk_allowlist中有配置public_key，仅在sdk_allowlist中的客户端才能访问对应的群组。
     - 其他不在sdk_allowlist中的客户端访问会有诸如The SDK is not allowed to access this group类似错误提示信息。
