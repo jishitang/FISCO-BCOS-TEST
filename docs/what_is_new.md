@@ -157,7 +157,7 @@ certPath = "conf"                           # The certification path
 + 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若客户端进来的交易TPS很高，网络断开的时间大于网络正常时间而且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。<br/><br/>
 + 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。<br/><br/>
 + 
-+ [CA黑白名单]（https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/certificate_list.html?highlight=CA%E9%BB%91%E5%90%8D%E5%8D%95)。CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。
++ [CA黑白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/certificate_list.html?highlight=CA%E9%BB%91%E5%90%8D%E5%8D%95)。 CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。
     - 白名单为空时表示不开启该功能，接受任何连接。
     - 配置黑名单，拒绝此NodeID节点发起的连接。
     - 配置白名单，仅在白名单内的节点能连接。
