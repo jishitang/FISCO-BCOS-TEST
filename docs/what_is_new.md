@@ -181,11 +181,11 @@ certPath = "conf"                           # The certification path
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
 * 证书合法性：证书不存在、证书不匹配（节点sm_crypto_channel配置为国密，SDK证书为非国密；节点配置为非国密，SDK证书为国密；证书错误等）。<br/><br/>
 * IP、Port正确性：IP/Port不存在、连接其他P2P Port、RPC Port等会导致create client失败。<br/><br/>
-* 配置单个直连节点：
+* 配置单个直连节点：<br>
 节点未启动、压测过程中启停节点，仅能断断续续处理交易。<br>
 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。<br>
 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。<br/><br/>
-* 配置多个直连节点时：
+* 配置多个直连节点时：<br>
 客户端持续发送大量交易后，检查发送到每个直连节点的交易数是否均匀，能否达到负载均衡的目的。<br>
 多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。<br>
 只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。<br>
