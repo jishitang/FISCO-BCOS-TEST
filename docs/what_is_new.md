@@ -22,6 +22,9 @@
 
 更多的群组介绍，请参考[群组架构设计文档](./design/architecture/group.md)和[群组使用教程](./manual/group_use_cases.md)
 
+## 权限
+介绍当前的几个manager作用及前提条件。
+
 ## 节点管理
 
 FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存储在远端分布式系统中，克服了本地化数据存储的诸多限制。该方案有以下优点：
@@ -48,7 +51,7 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 ## 连接
 区块链作为一个去中心化的分布式系统，由多个节点互相连接而成。链上的多个节点之间彼此连接，构成一个P2P网络，而连接也是各节点相互协作同步共识的前提条件。区块链中的连接主要包括节点间P2P连接、客户端与节点间连接。
 
-### 节点间P2P连接
+### 节点间P2P连接配置
 FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：node.key（节点密钥，ECC格式）、node.crt（节点证书，由CA颁发）、ca.crt（CA证书，由CA机构提供）。
 
 FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置（listen_ip若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。）：<br>
@@ -92,51 +95,10 @@ fisco-bco 40752 lifang   12u  IPv4  80971800      0t0  TCP VM_153_29_centos:2080
 fisco-bco 40752 lifang   14u  IPv4 168737867      0t0  TCP VM_153_29_centos:20801->172.16.153.21:17644 (ESTABLISHED)
 fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:20801->172.16.153.45:41316 (ESTABLISHED)
 ```
-
-### 客户端与节点连接
-FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的SDK来调用这些接口。在测试工作中涉及到的客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。
-
-节点侧提供给客户端使用的连接配置如下：<br>
-```
-[lifang@VM_153_29_centos node0]$ cat config.ini 
-[rpc]
-    channel_listen_ip=0.0.0.0
-    channel_listen_port=20810
-    jsonrpc_listen_ip=0.0.0.0
-    jsonrpc_listen_port=8305
-    disable_dynamic_group=false
-```
-    
- 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
-```
-[lifang@master-153-45 conf]$ cat config.toml 
-[cryptoMaterial]
-
-certPath = "conf"                           # The certification path  
-
-# The following configurations take the certPath by default if commented
-# caCert = "conf/ca.crt"                    # CA cert file path
-                                            # If connect to the GM node, default CA cert path is ${certPath}/gm/gmca.crt
-
-# sslCert = "conf/sdk.crt"                  # SSL cert file path
-                                            # If connect to the GM node, the default SDK cert path is ${certPath}/gm/gmsdk.crt
-
-# sslKey = "conf/sdk.key"                   # SSL key file path
-                                            # If connect to the GM node, the default SDK privateKey path is ${certPath}/gm/gmsdk.key
-
-# enSslCert = "conf/gm/gmensdk.crt"         # GM encryption cert file path
-                                            # default load the GM SSL encryption cert from ${certPath}/gm/gmensdk.crt
-
-# enSslKey = "conf/gm/gmensdk.key"          # GM ssl cert file path
-                                            # default load the GM SSL encryption privateKey from ${certPath}/gm/gmensdk.key
-
-[network]
-peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connect
-```
-
-### 测试
+### 节点间P2P连接测试
 对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
-+ 节点间连接正常，各个节点正常工作。<br/><br/>
++ 节点间内网连接正常，各个节点正常工作。<br/><br/>
++ 节点间外网连接正常，各个节点正常工作。<br/><br/> 
 + 节点间内外网混合模式，各个节点正常工作。<br/><br/>
 + 部分节点间网络不通，但可通过链上其他节点转发：
     - 4节点环境，A与B节点网络不通，B节点的消息可由C/D节点转发到A节点，A节点可正常工作。
@@ -168,16 +130,61 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
     - A节点2条黑名单序号相同，节点启动会失败，提示duplicate key name类似信息。
     - A节点2条白名单序号相同，节点启动会失败，提示duplicate key name类似信息。
 
+### 客户端与节点连接配置
+FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的SDK来调用这些接口。在测试工作中涉及到的客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。
 
+节点侧提供给客户端使用的连接配置如下：<br>
+```
+[lifang@VM_153_29_centos node0]$ cat config.ini 
+[rpc]
+    channel_listen_ip=0.0.0.0
+    channel_listen_port=20810
+    jsonrpc_listen_ip=0.0.0.0
+    jsonrpc_listen_port=8305
+    disable_dynamic_group=false
+```
+    
+客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
+```
+[lifang@master-153-45 conf]$ cat config.toml 
+[cryptoMaterial]
+
+certPath = "conf"                           # The certification path  
+
+# The following configurations take the certPath by default if commented
+# caCert = "conf/ca.crt"                    # CA cert file path
+                                            # If connect to the GM node, default CA cert path is ${certPath}/gm/gmca.crt
+
+# sslCert = "conf/sdk.crt"                  # SSL cert file path
+                                            # If connect to the GM node, the default SDK cert path is ${certPath}/gm/gmsdk.crt
+
+# sslKey = "conf/sdk.key"                   # SSL key file path
+                                            # If connect to the GM node, the default SDK privateKey path is ${certPath}/gm/gmsdk.key
+
+# enSslCert = "conf/gm/gmensdk.crt"         # GM encryption cert file path
+                                            # default load the GM SSL encryption cert from ${certPath}/gm/gmensdk.crt
+
+# enSslKey = "conf/gm/gmensdk.key"          # GM ssl cert file path
+                                            # default load the GM SSL encryption privateKey from ${certPath}/gm/gmensdk.key
+
+[network]
+peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connect
+```
+
+### 客户端与节点间连接测试
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
-+ 客户端与直连节点之间连接正常，业务正常处理。<br/><br/>
 + 非国密节点，非国密ssl连接，业务正常处理。<br/><br/>
 + 国密节点，非国密ssl连接，业务正常处理。<br/><br/>
 + 国密节点，国密ssl连接，业务正常处理。<br/><br/>
 + 
-+ 
++ 多个客户端，A部署，B调用
++ 连着客户端不断开，直连节点异常，再恢复
+
+
+
+
 + 配置单个直连节点：<br>
-    - 节点未启动、压测过程中启停节点，仅能断断续续处理交易。<br>
+    - 节点未启动、交易压测过程中启停节点，仅能断断续续处理交易。<br>
     - 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。<br>
     - 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。<br/><br/>
 + 配置多个直连节点时：<br>
