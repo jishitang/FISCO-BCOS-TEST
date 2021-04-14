@@ -22,8 +22,7 @@
 
 更多的群组介绍，请参考[群组架构设计文档](./design/architecture/group.md)和[群组使用教程](./manual/group_use_cases.md)
 
-## 权限
-介绍当前的几个manager作用及前提条件。
+
 
 ## 节点管理
 
@@ -225,6 +224,46 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 同时，2.0版本仍然兼容1.0版本的合约，更多关于CRUD接口的介绍，请参考[使用CRUD接口](./manual/smart_contract.html#crud)。
 
 ## 同步
+
+## 权限
+
+* grantCNSManager                           Grant permission for CNS by address
+* grantCNSManager                           Grant permission for CNS by address
+* grantCommitteeMember                      Grant the account committee member
+* grantCommitteeMember                      Grant the account committee member
+* grantContractStatusManager                Grant contract authorization to the user
+* grantContractStatusManager                Grant contract authorization to the user
+* grantContractWritePermission              Grant the account the contract write permission.
+* grantContractWritePermission              Grant the account the contract write permission.
+* grantDeployAndCreateManager               Grant permission for deploy contract and create user table by address
+* grantDeployAndCreateManager               Grant permission for deploy contract and create user table by address
+* grantNodeManager                          Grant permission for node configuration by address
+* grantNodeManager                          Grant permission for node configuration by address
+* grantOperator                             Grant the account operator
+* grantOperator                             Grant the account operator
+* grantSysConfigManager                     Grant permission for system configuration by address
+* grantSysConfigManager                     Grant permission for system configuration by address
+* grantUserTableManager                     Grant permission for user table by table name and address
+* grantUserTableManager                     Grant permission for user table by table name and address
+
+* revokeCNSManager                          Revoke permission for CNS by address
+* revokeCNSManager                          Revoke permission for CNS by address
+* revokeCommitteeMember                     Revoke the account from committee member
+* revokeCommitteeMember                     Revoke the account from committee member
+* revokeContractStatusManager               Revoke contract authorization to the user
+* revokeContractStatusManager               Revoke contract authorization to the user
+* revokeContractWritePermission             Revoke the account the contract write permission
+* revokeContractWritePermission             Revoke the account the contract write permission
+* revokeDeployAndCreateManager              Revoke permission for deploy contract and create user table by address
+* revokeDeployAndCreateManager              Revoke permission for deploy contract and create user table by address
+* revokeNodeManager                         Revoke permission for node configuration by address
+* revokeNodeManager                         Revoke permission for node configuration by address
+* revokeOperator                            Revoke the operator
+* revokeOperator                            Revoke the operator
+* revokeSysConfigManager                    Revoke permission for system configuration by address
+* revokeSysConfigManager                    Revoke permission for system configuration by address
+* revokeUserTableManager                    Revoke permission for user table by table name and address
+* revokeUserTableManager                    Revoke permission for user table by table name and address
 
 ## 兼容性
 
