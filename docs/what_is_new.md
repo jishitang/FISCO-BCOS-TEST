@@ -215,6 +215,12 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 
 ## 共识算法
 
+### PBFT
+
+### RAFT
+
+### RPBFT
+
 FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流的面向SQL设计的商业应用迁移到区块链上的成本。其好处显而易见：
 
 - 与传统业务开发模式类似，降低了合约开发学习成本；
@@ -224,6 +230,9 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 同时，2.0版本仍然兼容1.0版本的合约，更多关于CRUD接口的介绍，请参考[使用CRUD接口](./manual/smart_contract.html#crud)。
 
 ## 同步
+
+
+
 
 ## 权限
 从2.5.0版本开始，系统提供了一种基于角色的权限控制模型。委员角色拥有链治理相关的操作权限，用户不需要去具体关注底层系统表对应的权限，只需要关注角色的权限即可。系统默认没有角色账号，当存在一个角色账号时，角色对应的权限检查就会生效。目前细分了如下9个权限，在做权限测试时需要注意相关细节。
@@ -244,6 +253,11 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
     - 必须是委员才能添加、删除运维账号，其他角色无权限添加、删除运维账号。
     - 对账户赋予运维权限后，会默认给该账号添加DeployAndCreateManager、CNSManager权限。
+    - 对账户回收运维权限后，会同时回收DeployAndCreateManager、CNSManager权限。
+    - 账户已有DeployAndCreateManager权限，对该账户再次添加Operator权限，会默认给账户添加CNSManager权限，且不会重复添加DeployAndCreateManager权限。
+    - 账户已有CNSManager权限，对该账户再次添加Operator权限，会默认给账户添加DeployAndCreateManager权限，且不会重复添加CNSManager权限。
+    - 账户已有Operator权限，对帐户revokeCNSManager后，账户无Operator权限和CNSManager权限了，还剩DeployAndCreateManager权限。
+    - 账户已有Operator权限，对帐户revokeDeployAndCreateManager后，账户无Operator权限和DeployAndCreateManager权限了，还剩CNSManager权限。
  ```
  [group:1]> listOperators 
 Empty set.
@@ -278,12 +292,7 @@ Empty set.
 | 0xa086ef32af8a5d63edc14f29740e9316e27b52e8  |                    37673                    |
 ---------------------------------------------------------------------------------------------
 ```
-<br/>
-    - 对账户回收运维权限后，会同时回收DeployAndCreateManager、CNSManager权限。
-    - 账户已有DeployAndCreateManager权限，对该账户再次添加Operator权限，会默认给账户添加CNSManager权限，且不会重复添加DeployAndCreateManager权限。
-    - 账户已有CNSManager权限，对该账户再次添加Operator权限，会默认给账户添加DeployAndCreateManager权限，且不会重复添加CNSManager权限。
-    - 账户已有Operator权限，对帐户revokeCNSManager后，账户无Operator权限和CNSManager权限了，还剩DeployAndCreateManager权限。
-    - 账户已有Operator权限，对帐户revokeDeployAndCreateManager后，账户无Operator权限和DeployAndCreateManager权限了，还剩CNSManager权限。<br/><br/>
+<br/><br/>
 
 + grantCNSManager、revokeCNSManager<br/>
 给账户添加、删除使用CNS的权限。初始时所有账号都可以deployByCNS、registerCNS。存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。callByCNS和queryCNS命令不受该权限控制。其他账号无权deployByCNS、registerCNS。账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。<br/><br/>
