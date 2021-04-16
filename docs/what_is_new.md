@@ -217,9 +217,9 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 
 ### PBFT
 
-### RAFT
+### Raft
 
-### RPBFT
+### rPBFT
 
 FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流的面向SQL设计的商业应用迁移到区块链上的成本。其好处显而易见：
 
@@ -231,6 +231,8 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 
 ## 同步
 
+区块同步
+交易同步
 
 
 
@@ -292,8 +294,6 @@ Empty set.
 | 0xa086ef32af8a5d63edc14f29740e9316e27b52e8  |                    37673                    |
 ---------------------------------------------------------------------------------------------
 ```
-<br/><br/>
-
 + grantCNSManager、revokeCNSManager<br/>
 给账户添加、删除使用CNS的权限。初始时所有账号都可以deployByCNS、registerCNS。存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。callByCNS和queryCNS命令不受该权限控制。其他账号无权deployByCNS、registerCNS。账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。<br/><br/>
 
@@ -314,11 +314,6 @@ Empty set.
 
 + grantSysConfigManager、revokeSysConfigManager<br/>
 给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数。<br/><br/>
-
-
-
-
-
 
 ## 兼容性
 
