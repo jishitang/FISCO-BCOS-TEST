@@ -84,27 +84,27 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 实际环境中，节点可能因为服务器资源使用率等因素导致进程挂起（进程存在，但不能正常处理业务），在平常测试过程中，可以多模拟类似异常场景。<br/>
 
 ### group管理
-多群组架构中，基于具体业务场景，节点可以根据业务关系选择群组加入，参与到相关账本的数据共享和共识过程中。一个节点下的各群组独立运作，互不影响，各群组有自己独立的账本。我们可以通过console提供的相关命令来管理节点的group。
-generateGroup、generateGroupFromFile命令支持为指定节点动态创建一个新群组：
+多群组架构中，基于具体业务场景，节点可以根据业务关系选择群组加入，参与到相关账本的数据共享和共识过程中。一个节点下的各群组独立运作，互不影响，各群组有自己独立的账本。我们可以通过console提供的相关命令来管理节点的group。<br/>
+generateGroup、generateGroupFromFile命令支持为指定节点动态创建一个新群组：<br/>
 + 这里的指定节点必须为console直连节点（即在getAvailableConnections的返回结果中）才能创建成功。创建群组后，会在该节点下生成conf/group.x.genesis、conf/group.x.ini文件和data/groupx目录。
 + 如果新group的sealerList只有一个节点，创建成功后可直接startGroup，然后在新group上部署合约调用合约。
 + 如果新group的sealerList有多个节点，generateGroup命令中通过空格分隔，generateGroupFromFile通过逗号分隔，需要在每个节点对应的console都执行generateGroup/generateGroupFromFile操作。
 + generateGroupFromFile通过conf/group-generate-config.toml文件读取新群组配置，groupPeers必须是当前console的直连节点，需要覆盖一个和多个的场景。consensus中sealerList是新group的共识节点列表。
 + generateGroupFromFile中groupPeers有多个时，各个节点的创建结果应互不影响（即groupPeers配置了A、B节点，A节点的新group创建失败不影响B节点的新group创建）。<br/>
 
-startGroup：为指定节点启动群组。
-queryGroupStatus：查看指定节点相关群组的状态。
-stopGroup：为指定节点停止群组。
-removeGroup：为指定节点删除群组。
-recoverGroup：为指定节点恢复指定群组。
+startGroup：为指定节点启动群组。<br/>
+queryGroupStatus：查看指定节点相关群组的状态。<br/>
+stopGroup：为指定节点停止群组。<br/>
+removeGroup：为指定节点删除群组。<br/>
+recoverGroup：为指定节点恢复指定群组。<br/>
 
-创建群组后默认是STOPPED状态，需要为新group的各个节点启动新群组，启动成功后是RUNNING状态。
-当新群组RUNNING状态的节点个数满足对应共识算法规则时，可以在新群组成功部署、调用合约。
-必须已stopGroup才可进行removeGroup操作，removeGroup后群组会变为DELETED状态，不会删除后台对应的conf/group.x.genesis、conf/group.x.ini文件和data/groupx目录。
-必须已removeGroup才可成功recoverGroup，recoverGroup后群组变为STOPPED状态。
-当节点群组由STOPPED状态变为RUNNING状态后，如果此时该节点该群组的数据落后于其他节点，会自动同步到最新数据。
-节点的多个group之间互不影响（如节点有A、B两个group，group A非RUNNING状态，group B为RUNNING状态，group B仍可正常工作）。
-多群组下，节点在各个群组的类型不同，不影响各自群组正常工作（如节点1在group A为共识节点，在group B为观察或游离节点，节点1在各个群组的表现互不影响）。
+创建群组后默认是STOPPED状态，需要为新group的各个节点启动新群组，启动成功后是RUNNING状态。<br/>
+当新群组RUNNING状态的节点个数满足对应共识算法规则时，可以在新群组成功部署、调用合约。<br/>
+必须已stopGroup才可进行removeGroup操作，removeGroup后群组会变为DELETED状态，不会删除后台对应的conf/group.x.genesis、conf/group.x.ini文件和data/groupx目录。<br/>
+必须已removeGroup才可成功recoverGroup，recoverGroup后群组变为STOPPED状态。<br/>
+当节点群组由STOPPED状态变为RUNNING状态后，如果此时该节点该群组的数据落后于其他节点，会自动同步到最新数据。<br/>
+节点的多个group之间互不影响（如节点有A、B两个group，group A非RUNNING状态，group B为RUNNING状态，group B仍可正常工作）。<br/>
+多群组下，节点在各个群组的类型不同，不影响各自群组正常工作（如节点1在group A为共识节点，在group B为观察或游离节点，节点1在各个群组的表现互不影响）。<br/>
 
 
 
