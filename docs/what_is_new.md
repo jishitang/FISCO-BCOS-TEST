@@ -277,6 +277,25 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 
 实际现网运行的生产环境比测试环境要复杂很多，影响环境的因素众多，可能会遇到诸如网络抖动、节点各种异常等情况出现。无法完全避免各种异常的发生，但当各种故障解除后，系统应该能快速恢复可以正常使用。
 
+## 同步
+区块同步
+删除节点数据、节点异常后恢复（断网、）、停止节点一段时间、新扩容节点加入群组、
+链异常，部分节点不能同步
+游离节点不同步，游离节点设置为观察节点开始同步，设置为共识节点也会同步
+多账本
+不同存储类型同步
+
+
+
+
+
+
+交易同步
+
+视图同步
+
+
+
 ## 共识算法
 
 ### PBFT
@@ -293,10 +312,6 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 
 同时，2.0版本仍然兼容1.0版本的合约，更多关于CRUD接口的介绍，请参考[使用CRUD接口](./manual/smart_contract.html#crud)。
 
-## 同步
-
-区块同步
-交易同步
 
 
 
@@ -378,8 +393,8 @@ Empty set.
 ```
 #### grantCNSManager
 grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS命令不受该权限控制）。<br/>
-1. 初始时所有账号都可以deployByCNS、registerCNS。
-2. 存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。其他账号无权deployByCNS、registerCNS。
+1. 初始时所有账号都可以使用CNS。
+2. 存在CNSManager后，仅CNSManager可以使用CNS。其他账号无权限。
 3. 账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。
 #### grantDeployAndCreateManager
 grantDeployAndCreateManager、revokeDeployAndCreateManager用于给账户添加、删除部署合约和创建用户表的权限。
