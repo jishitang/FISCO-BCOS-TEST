@@ -270,6 +270,7 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 + 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
 + 登录console后，直连节点异常，直连节点恢复后，之前的客户端不用退出能正常使用。<br/><br/>
 + [SDK白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/manual/sdk_allowlist.html?highlight=SDK%E7%99%BD%E5%90%8D%E5%8D%95)。2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。
+<font size=7>- 默认sdk_allowlist列表数目为0，节点没有开启SDK白名单控制功能，任意SDK均可访问节点的该群组。</font>
     - 默认sdk_allowlist列表数目为0，节点没有开启SDK白名单控制功能，任意SDK均可访问节点的该群组。
     - 配置好sdk_allowlist后，执行bash node0/scripts/reload_sdk_allowlist.sh脚本，不重启节点可使配置生效。
     - sdk_allowlist中有配置public_key，在sdk_allowlist中的客户端能成功访问对应的群组。
