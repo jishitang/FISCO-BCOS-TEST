@@ -45,23 +45,23 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 #### 游离节点
 游离节点是指已启动，还未加入群组的节点，不能获取链上的数据。新扩容的节点在启动后，加入群组前就是游离节点。共识节点、观察节点均可被加为游离节点，console提供了removeNode命令将节点设置为游离节点。
 对于游离节点，需考虑如下场景：
-+ 正常场景下，针对共识/观察节点可以removeNode成功。
-+ 如果客户端（如java-sdk）配置的直连节点为游离节点，该直连节点不能接受客户端发过来的请求。<br/>
+1. 正常场景下，针对共识/观察节点可以removeNode成功。
+2. 客户端（如java-sdk）配置的直连节点为游离节点，该直连节点不能接受客户端发过来的请求。
 
 #### 观察节点
 观察节点不能参与共识，但能实时同步链上的数据。共识节点、游离节点均可被添加为观察节点。console提供了addObserver命令将节点设置为观察节点，getObserverList命令查看当前group的观察节点列表。<br>
 对于观察节点，可以考虑如下因素：
-+ 正常场景下，针对游离/共识节点addObserver成功。节点被设置为观察节点后，不会参与打包出块，能实时同步链上数据。
-+ console在addObserver时未校验是否在节点的P2P连接列表中，即当待添加游离节点未启动，addObserver也能成功（go sdk有校验）。
-+ 待添加共识节点未启动（即不在节点的P2P连接列表中），addObserver时成功。
-+ 客户端（如java-sdk）配置的直连节点为观察节点，该直连节点能接受客户端发过来的交易转发给其他节点。<br/>
+1. 正常场景下，针对游离/共识节点addObserver成功。节点被设置为观察节点后，不会参与打包出块，能实时同步链上数据。
+2. console在addObserver时未校验是否在节点的P2P连接列表中，即当待添加游离节点未启动，addObserver也能成功（go sdk有校验）。
+3. 共识/游离节点未启动（即不在节点的P2P连接列表中），addObserver可成功。
+4. 客户端（如java-sdk）配置的直连节点为观察节点，该直连节点能接受客户端发过来的交易转发给其他节点。
 
 #### 共识节点
 共识节点是可以参与群组共识的节点，拥有群组的所有数据，能正常工作的节点，我们搭链时默认生成的都是共识节点。观察节点、游离节点均可被添加为共识节点。console提供了addSealer命令将节点设置为共识节点，getSealerList命令查看当前group的共识节点列表。<br>
 针对共识节点，测试过程中需要考虑到如下细节（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
-1. 正常场景下，针对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。
-2. 观察节点已同步到链上最新数据，addSealer成功后可正常工作。
-3. 观察节点未同步到链上最新数据，addSealer成功后会继续同步数据，数据同步完成后方可正常工作。
+1. 正常场景下，对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。
+2. 观察节点已同步到链上最新数据，addSealer后可正常工作。
+3. 观察节点未同步到链上最新数据，addSealer后会继续同步数据，数据同步完成后方可正常工作。
 4. 游离/观察节点未启动（即不在节点的P2P连接列表中），addSealer时错误提示信息合理。
 5. 客户端（如java-sdk）配置的直连节点为共识节点，该直连节点能接受客户端发过来的交易。
 
@@ -119,7 +119,7 @@ recoverGroup：为指定节点恢复指定群组。<br/>
 FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：node.key（节点密钥，ECC格式）、node.crt（节点证书，由CA颁发）、ca.crt（CA证书，由CA机构提供）。
 
 FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置（listen_ip若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。）：<br>
-```
+```Bash
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [p2p]
     listen_ip=0.0.0.0
@@ -135,7 +135,7 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
 ```
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
-```
+```Bash
 [lifang@VM_153_29_centos log]$ cat log_2021040814.00.log |grep P2P
 debug|2021-04-08 14:42:36.160654|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20801,nodeID=ae6970c8...
 debug|2021-04-08 14:42:36.160678|[P2P][Service] heartBeat ignore connected,endpoint=172.16.153.20:20802,nodeID=34f0aa07...
@@ -148,7 +148,7 @@ info|2021-04-08 14:42:36.160717|[P2P][Service] heartBeat,connected count=6
 ```
 
 也可通过listen_port监听查看节点间连接：<br>
-```
+```Bash
 [lifang@VM_153_29_centos log]$ lsof -i:20801
 COMMAND     PID   USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
 fisco-bco 40752 lifang    8u  IPv4  80950915      0t0  TCP *:20801 (LISTEN)
@@ -161,8 +161,8 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 ```
 ### P2P连接测试
 对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
-+ 节点间内网连接正常，各个节点正常工作。<br/><br/>
-+ 节点间外网连接正常，各个节点正常工作。<br/><br/> 
+1. 节点间内网连接正常，各个节点正常工作。<br/><br/>
+2. 节点间外网连接正常，各个节点正常工作。<br/><br/> 
 + 节点间内外网混合模式，各个节点正常工作。<br/><br/>
 + 部分节点间网络不通，但可通过链上其他节点转发：
     - 4节点环境，A与B节点网络不通，B节点的消息可由C/D节点转发到A节点，A节点可正常工作。
@@ -198,7 +198,7 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的SDK来调用这些接口。在测试工作中涉及到的客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。
 
 节点侧提供给客户端使用的连接配置如下：<br>
-```
+```Bash
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [rpc]
     channel_listen_ip=0.0.0.0
@@ -209,7 +209,7 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
 ```
     
 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
-```
+```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
 [cryptoMaterial]
 
@@ -343,7 +343,7 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
     - 账户已有CNSManager权限，对该账户再次添加Operator权限，会默认给账户添加DeployAndCreateManager权限，且不会重复添加CNSManager权限。
     - 账户已有Operator权限，对帐户revokeCNSManager后，账户无Operator权限和CNSManager权限了，还剩DeployAndCreateManager权限。
     - 账户已有Operator权限，对帐户revokeDeployAndCreateManager后，账户无Operator权限和DeployAndCreateManager权限了，还剩CNSManager权限。
- ```
+ ```Bash
  [group:1]> listOperators 
 Empty set.
 
