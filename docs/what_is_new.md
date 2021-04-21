@@ -52,7 +52,7 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 观察节点不能参与共识，但能实时同步链上的数据。共识节点、游离节点均可被添加为观察节点。console提供了addObserver命令将节点设置为观察节点，getObserverList命令查看当前group的观察节点列表。<br>
 对于观察节点，可以考虑如下因素：
 1. 正常场景下，针对游离/共识节点addObserver成功。节点被设置为观察节点后，不会参与打包出块，能实时同步链上数据。
-2. console在addObserver时未校验是否在节点的P2P连接列表中，即当待添加游离节点未启动，addObserver也能成功（go sdk有校验）。
+2. console在addObserver时未校验是否在节点的P2P连接列表中，即游离节点未启动，addObserver也能成功（go sdk有校验）。
 3. 共识/游离节点未启动（即不在节点的P2P连接列表中），addObserver可成功。
 4. 客户端（如java-sdk）配置的直连节点为观察节点，该直连节点能接受客户端发过来的交易转发给其他节点。
 
@@ -61,7 +61,7 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 针对共识节点，测试过程中需要考虑到如下细节（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
 1. 正常场景下，对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。
 2. 观察节点已同步到链上最新数据，addSealer后可正常工作。
-3. 观察节点未同步到链上最新数据，addSealer后会继续同步数据，数据同步完成后方可正常工作。
+3. 观察节点未同步到链上最新数据，addSealer后会继续同步数据，数据同步完成后正常工作。
 4. 游离/观察节点未启动（即不在节点的P2P连接列表中），addSealer时错误提示信息合理。
 5. 客户端（如java-sdk）配置的直连节点为共识节点，该直连节点能接受客户端发过来的交易。
 
@@ -163,20 +163,20 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 对于区块链中节点与节点之间的连接测试，可以从以下几方面入手：
 1. 节点间内网连接正常，各个节点正常工作。<br/><br/>
 2. 节点间外网连接正常，各个节点正常工作。<br/><br/> 
-+ 节点间内外网混合模式，各个节点正常工作。<br/><br/>
-+ 部分节点间网络不通，但可通过链上其他节点转发：
+3. 节点间内外网混合模式，各个节点正常工作。<br/><br/>
+4. 部分节点间网络不通，但可通过链上其他节点转发：
     - 4节点环境，A与B节点网络不通，B节点的消息可由C/D节点转发到A节点，A节点可正常工作。
     - 4节点环境，A与B/C节点网络都不通，B/C节点的消息可由D节点转发到A节点，A节点可正常工作。
     - 4节点环境，A与B/C/D节点网络都不通，A节点不能正常工作，满足3f+1（PBFT），链正常。
-+ 证书不正确：ca.crt、node.crt、node.key。<br/><br/>
-+ 在客户端持续发送交易的过程中，不启动节点、频繁启停节点导致与其他节点频繁断开重连，观察整条链是否正常工作，leader节点是否正确，以及频繁启停节点时节点的资源使用率是否有较大波动。<br/><br/>
-+ 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高，是否影响节点间连接。若节点进程未挂，但节点间连接异常，当资源使用率正常后，节点间P2P连接应能自动恢复。若节点进程挂掉，重启节点后，节点应能正常工作。<br/><br/>
-+ 节点所在服务器挂掉，进程被kill。<br/><br/>
-+ 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill -CONT PID命令恢复）。挂起后，进程由S变为T状态，节点没有时间片运行代码，不能正常处理业务。<br/><br/>
-+ 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若压测过程中客户端进来的交易TPS很高，网络断开的时间大于网络正常时间且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。<br/><br/>
-+ 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。<br/><br/>
-+ 节点所在服务器端口故障。<br/><br/>
-+ [CA黑白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/certificate_list.html?highlight=CA%E9%BB%91%E5%90%8D%E5%8D%95)。 CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。
+5. 证书不正确：ca.crt、node.crt、node.key。<br/><br/>
+6. 在客户端持续发送交易的过程中，不启动节点、频繁启停节点导致与其他节点频繁断开重连，观察整条链是否正常工作，leader节点是否正确，以及频繁启停节点时节点的资源使用率是否有较大波动。<br/><br/>
+7. 节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高，是否影响节点间连接。若节点进程未挂，但节点间连接异常，当资源使用率正常后，节点间P2P连接应能自动恢复。若节点进程挂掉，重启节点后，节点应能正常工作。<br/><br/>
+8. 节点所在服务器挂掉，进程被kill。<br/><br/>
+9. 节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill -CONT PID命令恢复）。挂起后，进程由S变为T状态，节点没有时间片运行代码，不能正常处理业务。<br/><br/>
+10. 节点间网络断连、网络延迟、网络频繁闪断等。服务器级别的网络断开可以直接禁用网卡，端口级别的可以用iptables模拟。网络频繁闪断时节点能断断续续处理业务，若压测过程中客户端进来的交易TPS很高，网络断开的时间大于网络正常时间且相差较大，网络断开期间节点落后区块较多，可能会出现网络正常期间，节点一直在同步，在下一次断开前仍未达到最新块高。<br/><br/>
+11. 节点带宽过低。带宽过低的节点，有时不能作为leader节点打包，最新区块落后，且由于带宽较低状态同步会较慢，带宽正常后节点正常工作。<br/><br/>
+12. 节点所在服务器端口故障。<br/><br/>
+13. [CA黑白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/certificate_list.html?highlight=CA%E9%BB%91%E5%90%8D%E5%8D%95)。 CA黑名单指拒绝写在黑名单中的节点连接。CA白名单指拒绝所有不在白名单中的节点连接。
     - 不配置黑白名单，表示不开启该功能，能与链上所有节点的连接。
     - 配置黑名单，拒绝此NodeID节点发起的连接。
     - 配置白名单，仅在白名单内的节点能连接。
@@ -237,43 +237,39 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 
 ### 客户端与节点间连接测试
 对于客户端与直连节点之间的连接测试，可以从以下几方面覆盖：
-+ 非国密节点，非国密ssl连接，业务正常处理。<br/><br/>
-+ 国密节点，非国密ssl连接，业务正常处理。<br/><br/>
-+ 国密节点，国密ssl连接，业务正常处理。<br/><br/>
-+ 证书：
+1. 非国密节点，非国密ssl连接，业务正常处理。<br/><br/>
+2. 国密节点，非国密ssl连接，业务正常处理。<br/><br/>
+3. 国密节点，国密ssl连接，业务正常处理。<br/><br/>
+4. 证书：
     - 客户端的证书放在默认路径下，客户端与节点连接正常，业务正常处理。
     - 客户端的证书放在自定义的路径下，客户端与节点连接正常，业务正常处理。
     - 客户端证书不存在。
     - 证书不匹配（国密ssl连接，SDK证书为非国密；非国密ssl连接，SDK证书为国密）。
     - 证书错误。
     - 客户端和直连节点的证书不属于同一机构。<br/><br/>
-+ IP、Port正确性：
+5. IP、Port正确性：
     - IP/Port不存在。
     - Port不匹配：连接其他P2P Port、RPC Port等。
     - Port故障。
     - IP不匹配<br/><br/>
-+ 客户端配置单个直连节点：
+6. 客户端配置单个直连节点：
     - 直连节点未启动，客户端跟直连节点之间build client failed。
     - 交易压测过程中启停节点，仅能断断续续处理交易。
     - 直连节点内存、磁盘IO、CPU、磁盘空间等资源使用率过高。
     - 直连节点进程状态异常，如挂起状态等（可通过kill -STOP PID触发，kill –CONT PID命令恢复）等。<br/><br/>
-+ 配置多个直连节点：
+7. 配置多个直连节点：
     - 客户端持续发送大量交易后，检查发送到每个直连节点的交易数，各个直连节点接收到的交易数相差很小，能达到负载均衡的目的。
-    - 多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。
-    - 只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。
-    - 只有其中一个节点有最新区块高度，停掉该节点，客户端交易发送失败。
     - 客户端的交易可以发送到观察直连节点。
     - 客户端的交易不能发送到游离直连节点。
     - 客户端的交易不能发送到状态异常的直连节点（进程停止、进程暂停）。
+    - 多个直连节点不属于同一agency但都属于同一group时，客户端的交易不能发到跟SDK所配证书不在同一机构的节点。日志中会有ssl handshake failed:/172.16.144.64:33000! Please check the certificate and ensure that the SDK and the node are in the same agency!"类似的错误提示信息。
+    - 只有部分节点拥有最新区块高度时，客户端的交易仅能发送到具有最新区块高度的直连节点。
+    - 只有其中一个节点有最新区块高度，停掉该节点，客户端交易发送失败。
     - 多个直连节点属于相同group时，只要有一个直连节点正常工作，客户端发送的交易仍能被成功处理。
 测试过程中可以根据如下方式统计客户端发送到每个直连节点的请求个数：打开客户端日志的TRACE级别（默认是DEBUG级别），持续发送完交易后过滤日志的如下关键字：cat sdk.log |grep 'asyncSendMessageToGroup, selectedPeer' | grep '172.16.153.29:20810'| wc -l，其中172.16.153.29:20810为配置的直连节点。<br/><br/>
-+ 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
-+ 登录console后，直连节点异常，直连节点恢复后，之前的客户端不用退出能正常使用。<br/><br/>
-+ [SDK白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/manual/sdk_allowlist.html?highlight=SDK%E7%99%BD%E5%90%8D%E5%8D%95)。2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。<br/>
-    - <font size=1>默认sdk_allowlist列表数目为0，节点没有开启SDK白名单控制功能，任意SDK均可访问节点的该群组。</font><br/>
-    - <font size=2>默认sdk_allowlist列表数目为0，节点没有开启SDK白名单控制功能，任意SDK均可访问节点的该群组。</font><br/>
-<font color=Black size=20>color=gray</font><br/>
-<font color=gray size=72>color=gray</font><br/>
+8. 客户端与直连节点之间网络延迟、闪断等异常。<br/><br/>
+9. 登录console后，直连节点异常，直连节点恢复后，之前的客户端不用退出能正常使用。<br/><br/>
+10. [SDK白名单](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/manual/sdk_allowlist.html?highlight=SDK%E7%99%BD%E5%90%8D%E5%8D%95)。2.0版本开始支持多群组，但没有控制SDK对各个群组的访问权限，只要能与节点连接，SDK就可以访问该节点上的所有群组，可能会引发安全问题。2.6.0版本引入了群组级别的SDK白名单机制，控制SDK对群组的访问权限，进一步提升区块链系统的安全性。群组级别的SDK白名单在group.{group_id}.ini中sdk_allowlist部分配置，其中public_key为SDK的公钥，非国密版为sdk.publickey，国密版为gmsdk.publickey。<br/>
     - 默认sdk_allowlist列表数目为0，节点没有开启SDK白名单控制功能，任意SDK均可访问节点的该群组。
     - 配置好sdk_allowlist后，执行bash node0/scripts/reload_sdk_allowlist.sh脚本，不重启节点可使配置生效。
     - sdk_allowlist中有配置public_key，在sdk_allowlist中的客户端能成功访问对应的群组。
@@ -325,7 +321,7 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 
 ## 权限
 从2.5.0版本开始，系统提供了一种基于角色的权限控制模型。委员角色拥有链治理相关的操作权限，用户不需要去具体关注底层系统表对应的权限，只需要关注角色的权限即可。系统默认没有角色账号，当存在一个角色账号时，角色对应的权限检查就会生效。目前细分了如下9个权限，在做权限测试时需要注意相关细节。
-+ grantCommitteeMember/revokeCommitteeMember<br/>
+#### grantCommitteeMember/revokeCommitteeMember<
 用于添加、删除委员。<br/>
     - 当前系统中还没有委员，任意正常账号可直接添加自己作为系统的第一个委员。
     - 系统中已存在1个委员，必须是委员账号才能添加新委员，其他账号无权限添加委员。
@@ -338,7 +334,7 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
     - 只有委员可以冻结、解冻账户（freezeAccount、unfreezeAccount）。
     - 委员可以冻结、解冻任意合约（freezeContract、unfreezeContract）。
     - 删除委员也类似。<br/><br/>
-+ grantOperator、revokeOperator<br/>
+#### grantOperator、revokeOperator
 用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
     - 必须是委员才能添加、删除运维账号，其他角色无权限添加、删除运维账号。
     - 对账户赋予运维权限后，会默认给该账号添加DeployAndCreateManager、CNSManager权限。
@@ -381,25 +377,25 @@ Empty set.
 | 0xa086ef32af8a5d63edc14f29740e9316e27b52e8  |                    37673                    |
 ---------------------------------------------------------------------------------------------
 ```
-+ grantCNSManager、revokeCNSManager<br/>
+#### grantCNSManager、revokeCNSManager
 给账户添加、删除使用CNS的权限。初始时所有账号都可以deployByCNS、registerCNS。存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。callByCNS和queryCNS命令不受该权限控制。其他账号无权deployByCNS、registerCNS。账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。<br/><br/>
 
-+ grantDeployAndCreateManager、revokeDeployAndCreateManager<br/>
+#### grantDeployAndCreateManager、revokeDeployAndCreateManager
 给账户添加、删除部署合约和创建用户表的权限。初始时所有账号都可以部署合约和创建表。存在DeployAndCreateManager后，仅DeployAndCreateManager可以部署合约和创建表，其他无权限账号部署合约、创建用户表失败。账户拥有DeployAndCreateManager权限后，再对该账户grantCNSManager，账户会有Operator权限。<br/><br/>
 
-+ grantNodeManager、revokeNodeManager<br/>
+#### grantNodeManager、revokeNodeManager
 给账户添加节点管理权限。无NodeManager之前所有账号都可以进行节点管理。存在NodeManager后，有权限的账号才可以addSealer、addObserver和removeNode。<br/><br/>
 
-+ grantContractStatusManager、revokeContractStatusManager<br/>
+#### grantContractStatusManager、revokeContractStatusManager
 合约部署好后，部署合约的账户默认就有ContractStatusManager权限。该命令用于已有ContractStatusManager权限的账号给其他账号授予指定合约的合约管理权限。这两条命令的参数可以不带0x前缀。需注意，每一个合约都必须有一个 ContractStatusManager，合约的最后一个ContractStatusManager不能被revoke。只有系统中的委员和拥有ContractStatusManager权限的账号可以对指定的合约进行freezeContract、unfreezeContract操作。<br/><br/>
 
-+ grantContractWritePermission、revokeContractWritePermission<br/>
+#### grantContractWritePermission、revokeContractWritePermission
 给账户添加对合约写接口的调用权限。部署合约后，合约的ContractWritePermission为空，所有账户都可以调用合约写接口。一旦合约有一个ContractWritePermission账户后，其他账户就不能调用该合约的写接口。<br/><br/>
 
-+ grantUserTableManager、revokeUserTableManager<br/>
+#### grantUserTableManager、revokeUserTableManager
 给账户添加、删除对用户表的写权限。建表后不存在UserTableManager时所有账户均拥有对该表的写权限，一旦有UserTableManager后，仅UserTableManager可以insert、update、delete表成功，select不受影响。<br/><br/>
 
-+ grantSysConfigManager、revokeSysConfigManager<br/>
+#### grantSysConfigManager、revokeSysConfigManager
 给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数。<br/><br/>
 
 ## 兼容性
