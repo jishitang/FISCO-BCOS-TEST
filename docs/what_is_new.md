@@ -43,13 +43,13 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 
 ### 节点类型
 #### 游离节点
-游离节点是指已启动，还未加入群组的节点，不能获取链上的数据。新扩容的节点在启动后，加入群组前就是游离节点。共识节点、观察节点均可被加为游离节点，console提供了removeNode命令将节点设置为游离节点。
+游离节点是指已启动，还未加入群组的节点，不能获取链上的数据。新扩容的节点在启动后，加入群组前就是游离节点。console提供了removeNode命令将共识/观察节点设置为游离节点。<br/>
 对于游离节点，需考虑如下场景：
 1. 正常场景下，针对共识/观察节点可以removeNode成功。
 2. 客户端（如java-sdk）配置的直连节点为游离节点，该直连节点不能接受客户端发过来的请求。
 
 #### 观察节点
-观察节点不能参与共识，但能实时同步链上的数据。共识节点、游离节点均可被添加为观察节点。console提供了addObserver命令将节点设置为观察节点，getObserverList命令查看当前group的观察节点列表。<br>
+观察节点不能参与共识，但能实时同步链上的数据。console提供了addObserver命令将共识/游离节点设置为观察节点，getObserverList命令查看当前group的观察节点列表。<br/>
 对于观察节点，可以考虑如下因素：
 1. 正常场景下，针对游离/共识节点addObserver成功。节点被设置为观察节点后，不会参与打包出块，能实时同步链上数据。
 2. console在addObserver时未校验是否在节点的P2P连接列表中，即游离节点未启动，addObserver也能成功（go sdk有校验）。
@@ -57,15 +57,14 @@ FISCO BCOS 2.0新增了对分布式数据存储的支持，节点可将数据存
 4. 客户端（如java-sdk）配置的直连节点为观察节点，该直连节点能接受客户端发过来的交易转发给其他节点。
 
 #### 共识节点
-共识节点是可以参与群组共识的节点，拥有群组的所有数据，能正常工作的节点，我们搭链时默认生成的都是共识节点。观察节点、游离节点均可被添加为共识节点。console提供了addSealer命令将节点设置为共识节点，getSealerList命令查看当前group的共识节点列表。<br>
-针对共识节点，测试过程中需要考虑到如下细节（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
+共识节点是指可以参与群组共识，拥有群组的所有数据，能正常工作的节点，搭链时默认生成的都是共识节点。console提供了addSealer命令将观察/游离节点设置为共识节点，getSealerList命令查看当前group的共识节点列表。<br/>
+针对共识节点，需注意（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
 1. 正常场景下，对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。
 2. 观察节点已同步到链上最新数据，addSealer后可正常工作。
 3. 观察节点未同步到链上最新数据，addSealer后会继续同步数据，数据同步完成后正常工作。
 4. 游离/观察节点未启动（即不在节点的P2P连接列表中），addSealer时错误提示信息合理。
 5. 客户端（如java-sdk）配置的直连节点为共识节点，该直连节点能接受客户端发过来的交易。
-
-新节点加入到群组的共识列表后，可能会打破群组原来的容错平衡（如群组原有2个节点，采用PBFT共识，2个节点均正常工作且块高较大。新的游离节点加入共识节点后，新节点同步到最新块高需要一定时间。在该节点同步到最新块高期间，会导致该群组不满足3f+1<=N而不能正常工作）。因此，除非在测试环境中验证功能，在生产环境中，为避免这种现象发生，在扩容时一般按照如下顺序：启动新节点，查看新节点跟链上其他节点P2P连接是否正常。将新节点设置为观察节点，使新节点开始同步链上数据。待新节点同步到链上的最新数据后，将新节点加入到群组共识列表中。<br/>
+6. addSealer操作可能会打破群组原来的容错平衡（如群组原有2个节点，采用PBFT共识，2个节点均正常工作且块高较大。新的游离节点加入共识节点后，新节点同步到最新块高需要一定时间。在该节点同步到最新块高期间，会导致该群组不满足3f+1<=N而不能正常工作）。因此，除非在测试环境中验证功能，在生产环境中，为避免这种现象发生，在扩容时一般按照如下顺序：启动新节点，查看新节点跟链上其他节点P2P连接是否正常。将新节点设置为观察节点，使新节点开始同步链上数据。待新节点同步到链上的最新数据后，将新节点加入到群组共识列表中。<br/>
 同样的，为避免破坏链的正常工作形态，在节点退出时，一般按照如下顺序操作：节点removeNode退出群组、停止节点或设置CA黑白名单等退出网络。<br/>
 
 不同的节点类型有不同的表现形式，在实际压测过程中，可以让节点频繁地在3种类型之间来回转换，观察各种类型的节点表现是否符合预期以及对压测的影响。<br/>
@@ -321,8 +320,8 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 
 ## 权限
 从2.5.0版本开始，系统提供了一种基于角色的权限控制模型。委员角色拥有链治理相关的操作权限，用户不需要去具体关注底层系统表对应的权限，只需要关注角色的权限即可。系统默认没有角色账号，当存在一个角色账号时，角色对应的权限检查就会生效。目前细分了如下9个权限，在做权限测试时需要注意相关细节。
-#### grantCommitteeMember/revokeCommitteeMember
-用于添加、删除委员。<br/>
+#### grantCommitteeMember
+grantCommitteeMember、revokeCommitteeMember用于添加、删除委员。<br/>
 1. 若系统中还没有委员，任意正常账号可直接添加自己作为系统的第一个委员。
 2. 系统中已存在1个委员，必须是委员账号才能添加新委员，其他账号无权限添加委员。
 3. 系统中存在2个委员（各委员默认权重为1，系统默认阈值为50%），需要2个委员都投票才能使得有效票数占比2/2>阈值50%，从而添加新委员成功。
@@ -334,8 +333,8 @@ FISCO BCOS 2.0新增符合CRUD接口的合约接口规范，简化了将主流�
 9. 只有委员可以冻结、解冻账户（freezeAccount、unfreezeAccount）。
 10. 委员可以冻结、解冻任意合约（freezeContract、unfreezeContract）。
 11. 删除委员也类似。<br/><br/>
-#### grantOperator、revokeOperator
-用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
+#### grantOperator
+grantOperator、revokeOperator用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
 1. 必须是委员才能添加、删除运维账号，其他角色无权限添加、删除运维账号。
 2. 对账户赋予运维权限后，会默认给该账号添加DeployAndCreateManager、CNSManager权限。
 3. 对账户回收运维权限后，会同时回收DeployAndCreateManager、CNSManager权限。
@@ -377,36 +376,36 @@ Empty set.
 | 0xa086ef32af8a5d63edc14f29740e9316e27b52e8  |                    37673                    |
 ---------------------------------------------------------------------------------------------
 ```
-#### grantCNSManager、revokeCNSManager
-用于给账户添加、删除使用CNS的权限。<br/>
+#### grantCNSManager
+grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS命令不受该权限控制）。<br/>
 1. 初始时所有账号都可以deployByCNS、registerCNS。
-2. 存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。callByCNS和queryCNS命令不受该权限控制。其他账号无权deployByCNS、registerCNS。
+2. 存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。其他账号无权deployByCNS、registerCNS。
 3. 账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。
-#### grantDeployAndCreateManager、revokeDeployAndCreateManager
-用于给账户添加、删除部署合约和创建用户表的权限。
+#### grantDeployAndCreateManager
+grantDeployAndCreateManager、revokeDeployAndCreateManager用于给账户添加、删除部署合约和创建用户表的权限。
 1. 初始时所有账号都可以部署合约和创建表。
 2. 存在DeployAndCreateManager后，仅DeployAndCreateManager可以部署合约和创建表，其他无权限账号部署合约、创建用户表失败。
 3. 账户拥有DeployAndCreateManager权限后，再对该账户grantCNSManager，账户会有Operator权限。
-#### grantNodeManager、revokeNodeManager
-用于给账户添加节点管理权限。
+#### grantNodeManager
+grantNodeManager、revokeNodeManager用于给账户添加、删除节点管理的权限（指addSealer、addObserver和removeNode操作）。
 1. 初始时系统中无NodeManager，所有账号都可以进行节点管理。
-2. 存在NodeManager后，有权限的账号才可以addSealer、addObserver和removeNode。
-#### grantContractStatusManager、revokeContractStatusManager
-用于已有ContractStatusManager权限的账号给其他账号授予指定合约的合约管理权限。
+2. 存在NodeManager后，有权限的账号才可以进行节点管理，其他账号操作失败。
+#### grantContractStatusManager
+grantContractStatusManager、revokeContractStatusManager用于已有ContractStatusManager权限的账号给其他账号授予指定合约的合约管理权限。
 1. 合约部署好后，部署合约的账户默认有ContractStatusManager权限。
 2. 这两条命令的参数可以不带0x前缀。
 3. 每一个合约都必须有一个 ContractStatusManager，合约的最后一个ContractStatusManager不能被revoke。
 4. 只有系统中的委员和拥有ContractStatusManager权限的账号可以对指定的合约进行freezeContract、unfreezeContract操作。
-#### grantContractWritePermission、revokeContractWritePermission
-用于给账户添加对合约写接口的调用权限。
+#### grantContractWritePermission
+grantContractWritePermission、revokeContractWritePermission用于给账户添加对合约写接口的调用权限。
 1. 部署合约后，合约的ContractWritePermission为空，所有账户都可以调用合约写接口。
 2. 合约存在ContractWritePermission账户后，其他账户就不能调用该合约的写接口。
-#### grantUserTableManager、revokeUserTableManager
-用于给账户添加、删除对用户表的写权限。
+#### grantUserTableManager
+grantUserTableManager、revokeUserTableManager用于给账户添加、删除对用户表的写权限。
 1. 建表后不存在UserTableManager，所有账户均拥有对该表的写权限。
 2. 存在UserTableManager后，仅UserTableManager可以insert、update、delete表成功，其他账户无权更新表数据，select不受影响。
-#### grantSysConfigManager、revokeSysConfigManager
-给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数。
+#### grantSysConfigManager
+grantSysConfigManager、revokeSysConfigManager用于给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数。
 
 ## 兼容性
 
