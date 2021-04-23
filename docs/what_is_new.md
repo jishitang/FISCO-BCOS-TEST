@@ -307,9 +307,27 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
 下面列举一些常见的交易同步验证点：
 
 
-直连节点是观察节点，交易广播给所有节点？
+直连节点是观察节点，选择1个共识节点转发：
+直连节点观察节点，直连节点日志：
+debug|2021-04-23 10:29:32.458059|[g:2][SYNC][id:d77bf60e...][Tx]Send transaction to peer,txNum=1,fastForwardRemainTxs=false,startIndex=0,toNodeId=5b30b9ef...,messageSize(B)=262
 
+5b30b9ef...节点转发：
+debug|2021-04-23 10:29:32.456355|[g:2][SYNC][id:5b30b9ef...]receive and send transactions by tree,consIndex=0,fromPeer=d77bf60e...
+debug|2021-04-23 10:29:32.456402|[g:2][SYNC][id:5b30b9ef...]forward transaction,selectedNode=822a1bf3...
+debug|2021-04-23 10:29:32.456416|[g:2][SYNC][id:5b30b9ef...]forward transaction,selectedNode=ea8f2734...
 
+28节点收到的消息日志：
+debug|2021-04-23 10:29:32.458084|[g:2][SYNC][id:ea8f2734...]receive and send transactions by tree,consIndex=0,fromPeer=5b30b9ef...
+35节点：
+debug|2021-04-23 10:29:32.456864|[g:2][SYNC][id:822a1bf3...]receive and send transactions by tree,consIndex=0,fromPeer=5b30b9ef...
+
+直连节点是共识节点，sdk来的交易会发送到所有节点：还是3个节点？？
+debug|2021-04-23 09:58:10.097824|[g:2][SYNC][id:d77bf60e...][Tx]Send transaction to peer,txNum=1,fastForwardRemainTxs=false,startIndex=0,toNodeId=5b30b9ef...,messageSize(B)=1149
+debug|2021-04-23 09:58:10.097872|[g:2][SYNC][id:d77bf60e...][Tx]Send transaction to peer,txNum=1,fastForwardRemainTxs=false,startIndex=0,toNodeId=ea8f2734...,messageSize(B)=1149
+debug|2021-04-23 09:58:10.097950|[g:2][SYNC][id:d77bf60e...][Tx]Send transaction to peer,txNum=1,fastForwardRemainTxs=false,startIndex=0,toNodeId=822a1bf3...,messageSize(B)=1149
+
+直连节点是游离节点
+直连节点只跟群组内部分节点联通，其他节点会转发交易到未连通的节点。
 
 #### 视图同步？？？？？？？？？？？？？？
 
