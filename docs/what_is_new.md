@@ -232,7 +232,7 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     jsonrpc_listen_port=8305
     disable_dynamic_group=false
 ```
-    
+
 客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
 ```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
@@ -467,7 +467,7 @@ Empty set.
 |                   address                   |                 enable_num                  |
 | 0xa086ef32af8a5d63edc14f29740e9316e27b52e8  |                    37673                    |
 ---------------------------------------------------------------------------------------------
-```
+ ```
 #### grantCNSManager
 grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS命令不受该权限控制）。<br/>
 1. 初始时所有账号都可以使用CNS。
@@ -507,13 +507,13 @@ grantSysConfigManager、revokeSysConfigManager用于给账户添加、删除修�
 为了解决上述问题，提高自动化用例的可移植性，使其能快速适配不同环境，本次基于行内统一测试平台引入全局变量功能，设计相关自动化用例。本文主要对自动化测试范围、组网、全局变量、用例做相关介绍。
 #### 测试范围
 本次自动化用例设计预计覆盖如下测试点，包括节点、console、java-sdk3大类（后续补充其他）。节点主要从组网类型、操作系统、节点类型、多群组、存储类型、加密类型、连接同步共识、以及大数据量、兼容性等方面展开。console部分主要包括当前所支持的所有命令、历史问题单中重要的场景、历史搜集的solidity合约、客户端与直连节点间的交互等测试点。java-sdk主要包括4种合约类型、客户端与直连节点交互、一定压测背景下的各种操作等。
- 
+
 
 #### 组网
 自动化环境一共有A、B、C、D、E、F、G 7个节点，覆盖2个group，其中g1有7个节点（A、B、C、D、E、F、G）,g2有4个节点（A、C、F、G）。正常情况下，节点间是两两网络互通的。
 自动化环境节点间连接IP采用内外网混合模式，Port为外网port。所有节点、console和java-sdk-dmeo可以放在一台服务器，也可以放在多台服务器。本文以如下组网配置为例，覆盖多群组和不同存储方式（所有节点和客户端分布在4台服务器上：服务器1上有2个节点，服务器2上有1个节点，服务器3上有3个节点，服务器4上有1个节点和2个客户端）。
 
-
+？？？？？？？？？？？？？？？？？？？？？
 
 
 
