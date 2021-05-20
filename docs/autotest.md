@@ -9,7 +9,8 @@
 
 #### 测试范围
 本次自动化用例设计预计覆盖如下测试点，包括节点、console、java-sdk3大类。节点主要从组网类型、操作系统、节点类型、多群组、存储类型、加密类型、连接同步共识、以及大数据量、兼容性等方面展开。console部分主要包括当前所支持的所有命令、历史问题单中重要的场景、历史搜集的solidity合约、客户端与直连节点间的交互等测试点。java-sdk主要包括4种合约类型、客户端与直连节点交互、一定压测背景下的各种操作等。
-![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E8%8C%83%E5%9B%B4.png)
+
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autotestScope.png)
 
 #### 组网
 自动化环境一共有A、B、C、D、E、F、G 7个节点，覆盖2个group，其中g1有7个节点（A、B、C、D、E、F、G）,g2有4个节点（A、C、F、G）。正常情况下，节点间是两两网络互通的。
