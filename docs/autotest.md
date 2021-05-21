@@ -4,11 +4,11 @@
 目前所有的底层自动化测试用例分布在两个平台上：行内统一自动化测试门户和RobotFrameWork。<br/>
 
 ### 行内测试门户
-目前已基于行内测试平台设计了多个自动化用例，历史自动化用例中，涉及服务器IP、用户名、密码、Port、错误提示信息等都直接固定写在每一个用例中，导致所有的自动化用例只能在固定的机器上面执行，一旦服务器有故障或其他原因导致要在新的服务器上重新搭建环境批跑用例时，需要针对每一个用例修改相关变量，工作量繁琐，不便于用例移植。
-为了解决上述问题，提高自动化用例的可移植性，使其能快速适配不同环境，本次基于行内统一测试平台引入全局变量功能，设计相关自动化用例。本文主要对自动化测试范围、组网、全局变量、用例做相关介绍。
+目前已基于行内测试平台设计了多个自动化用例，历史自动化用例中，涉及服务器IP、用户名、密码、Port、错误提示信息等都直接固定写在每一个用例中，导致所有的自动化用例只能在固定的机器上面执行，一旦服务器有故障或其他原因导致要在新的服务器上重新搭建环境批跑用例时，需要针对每一个用例修改相关变量，工作量繁琐，不便于用例移植。<br/><br/>
+为了解决上述问题，提高自动化用例的可移植性，使其能快速适配不同环境，本次基于行内统一测试平台引入全局变量功能，设计相关自动化用例。本文主要对自动化测试范围、组网、全局变量、用例做相关介绍。<br/>
 
 #### 测试范围
-本次自动化用例设计预计覆盖如下测试点（其中部分功能点还未实现），包括节点、console、java-sdk3大类。节点主要从组网类型、操作系统、节点类型、多群组、存储类型、加密类型、连接同步共识、以及大数据量、兼容性等方面展开。console部分主要包括当前所支持的所有命令、历史问题单中重要的场景、历史搜集的solidity合约、客户端与直连节点间的交互等测试点。java-sdk主要包括4种合约类型、客户端与直连节点交互、一定压测背景下的各种操作等。
+本次自动化用例设计预计覆盖如下测试点（其中部分功能点还未实现），包括节点、console、java-sdk3大类。节点主要从组网类型、操作系统、节点类型、多群组、存储类型、加密类型、连接同步共识、以及大数据量、兼容性等方面展开。console部分主要包括当前所支持的所有命令、历史问题单中重要的场景、历史搜集的solidity合约、客户端与直连节点间的交互等测试点。java-sdk主要包括4种合约类型、客户端与直连节点交互、一定压测背景下的各种操作等。<br/>
 
 ![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autotestScope.png)<br/>
 
@@ -37,12 +37,12 @@
 ![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseStructure2.png)<br/>
 
 将上述用例拆分为红框内3部分：<br/>
-1. 获取全局变量，初始化环境：获取该用例需要用到的全局变量，转化为用例的内部变量。回收相关账户对应的权限，避免用例后续步骤中赋权失败。其中全局变量获取格式如下，输入参数为事先配置的全局变量，输出参数为用例中定义的变量。输入参数和输出参数一一对应，即输入参数的item 1对应输出参数的item11.如果用例中某变量既有全局变量给它映射值，又有在用例中赋值，此时全局变量映射的值优先级更高。<br/>
+1. 获取全局变量，初始化环境：获取该用例需要用到的全局变量，转化为用例的内部变量。回收相关账户对应的权限，避免用例后续步骤中赋权失败。其中全局变量获取格式如下，输入参数为事先配置的全局变量，输出参数为用例中定义的变量。输入参数和输出参数一一对应，即输入参数的item 1对应输出参数的item11.如果用例中某变量既有全局变量给它映射值，又有在用例中赋值，此时全局变量映射的值优先级更高。<br/><br/>
 
 ![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/AutoCaseGlobalkey.png)
 
-2. 用例具体操作步骤及结果校验：用例验证场景的具体实施步骤以及每个步骤的结果校验。<br/>
-3. Cleanup环境回滚：如果用例中涉及对环境的修改，且该修改会影响其他用例的执行结果时，需要在用例末尾添加环境回滚的步骤。环境回滚的相关步骤应放在cleanup的逻辑中（因为无论前面用例步骤执行是否成功，只要放到cleanup中的步骤都会被执行到）。<br/>
+2. 用例具体操作步骤及结果校验：用例验证场景的具体实施步骤以及每个步骤的结果校验。<br/><br/>
+3. Cleanup环境回滚：如果用例中涉及对环境的修改，且该修改会影响其他用例的执行结果时，需要在用例末尾添加环境回滚的步骤。环境回滚的相关步骤应放在cleanup的逻辑中（因为无论前面用例步骤执行是否成功，只要放到cleanup中的步骤都会被执行到）。<br/><br/>
 
 ##### 环境搭建
 目前环境搭建主要包括节点搭建、安装console、安装java-sdk。<br/><br/>
@@ -58,33 +58,31 @@
 
 #### 配置自动化定时执行
 定时执行即在配置的时间点自动触发自动化用例执行。当前我们主要是因为如下场景使用到定时执行能力。由于节点支持国密、非国密，且国密节点又支持国密ssl、非国密ssl，而我们每次搭建环境只能覆盖到一种类型，因此我们可以在当前非国密环境批跑完自动化用例后，重新修改全局变量的值，搭建国密环境再一次批跑自动化用例。这里第二次批跑自动化用例的时候就会用到定时执行能力。<br/><br/>
-在测试管理—>定时执行配置菜单页新增配置：
-
+在测试管理—>定时执行配置菜单页新增配置：<br/>
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseConfigure1.png)
 
 
 定时执行配置详情如下，配置好时间计划、关联已有的自动化计划即可。<br/><br/>
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseConfigure2.png)
 
-
-其中时间计划项配置参考如下Cron表达式格式（配置好后点击右边的校验表达式可以检查下时间配置是否正确）：
-Cron表达式是一个字符串，字符串以 5或6个空格隔开，分为 6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：
-(1) Seconds Minutes Hours DayofMonth Month DayofWeek Year
-(2) Seconds Minutes Hours DayofMonth Month DayofWeek
-cron从左到右（用空格隔开）: 分 小时 月份中的日期 月份 星期中的日期 年份
-表达式各字段的含义如下：
-
+其中时间计划项配置参考如下Cron表达式格式（配置好后点击右边的校验表达式可以检查下时间配置是否正确）：<br/>
+Cron表达式是一个字符串，字符串以 5或6个空格隔开，分为 6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：<br/>
+(1) Seconds Minutes Hours DayofMonth Month DayofWeek Year<br/>
+(2) Seconds Minutes Hours DayofMonth Month DayofWeek<br/>
+cron从左到右（用空格隔开）: 分 小时 月份中的日期 月份 星期中的日期 年份<br/>
+表达式各字段的含义如下：<br/>
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseConfigure3.png)
 
 #### 部署Agent后配置文件修改
-之前通过测试平台执行console命令时经常遇到卡死现象，为了解决这一问题，平台提供了agent模块。部署agent后需要修改如下3处配置项：
-start.sh中APP_HOME值：
+之前通过测试平台执行console命令时经常遇到卡死现象，为了解决这一问题，平台提供了agent模块。部署agent后需要修改如下3处配置项：<br/>
+1. start.sh中APP_HOME值：
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseAgent1.png)
 
+2. logback.xml中log_path值：
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseAgent2.png)
 
-logback.xml中log_path值：
-
-
-application.properties中server.port配置为没有被占用的端口：
-
-
-
+3. application.properties中server.port配置为没有被占用的端口：
+![image](https://github.com/jishitang/FISCO-BCOS-TEST/blob/dev/images/others/autoCaseAgent3.png)
 
 ### RobotFrameWork
 
