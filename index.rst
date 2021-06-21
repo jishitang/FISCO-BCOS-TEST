@@ -63,3 +63,4 @@ FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口�
    docs/faq.md
    docs/community.md
    docs/autotest.md
+   docs/consensus.md
