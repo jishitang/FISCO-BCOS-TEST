@@ -2,7 +2,6 @@
 
 
 .. toctree::
-   :hidden:
    :maxdepth: 1
 
-   perfTool.md
+   Java-sdk-demo.md
