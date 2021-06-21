@@ -1,7 +1,7 @@
 
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
    autotest.md
    robotFrameWork.md
