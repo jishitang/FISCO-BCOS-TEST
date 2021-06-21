@@ -1,7 +1,7 @@
 # 自动化(OK)
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    autotest.md
    robotFrameWork.md
