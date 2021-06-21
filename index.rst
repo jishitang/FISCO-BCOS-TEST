@@ -48,8 +48,9 @@ FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口�
 .. toctree::
    :hidden:
    :maxdepth: 1
+   :caption: FISCO BCOS
    
-   docs/function/connection.md
+   docs/function/index.rst
    docs/autotest.md
    docs/performance/perfTool.md
    docs/stability.md
