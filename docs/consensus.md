@@ -1,3 +1,4 @@
+# 共识算法
 ## 共识算法
 FISCO BCOS多群组架构中，不同群组可运行不同的共识算法，组与组之间的共识互不影响。FISCO BCOS目前支持PBFT(consensus_type=pbft), Raft(consensus_type=raft)和rPBFT(consensus_type=rpbft)3种共识算法。<br/><br/>
 PBFT：BFT类共识算法，可容忍不超过三分之一的故障节点和作恶节点，可达到最终一致性。<br/>
