@@ -53,7 +53,7 @@ MariaDB [(none)]>
 
 ### 恢复/etc/my.cnf文件
 删除下面的 "skip-grant-tables" 配置项。
-![](../images/others/mysqlAccessDenied_cnf.png)<br/>
+![](../../images/others/mysqlAccessDenied_cnf.png)<br/>
 
 ### 重启mysql服务
 ```Bash
