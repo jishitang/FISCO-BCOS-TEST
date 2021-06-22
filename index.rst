@@ -51,13 +51,24 @@ FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口�
    :caption: FISCO BCOS
    
    docs/function/index.rst
-   docs/autotest/index.rst
    docs/performance/index.rst
    docs/stability/index.rst
    docs/compatibility/index.rst
+   docs/autotest/index.rst
+   
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :caption: 测试基础
+   
+   docs/basic/index.rst
+   
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :caption: 经验文档
+   
    docs/share/index.rst
-   
-   
    
    
    
