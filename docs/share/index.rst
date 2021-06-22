@@ -8,6 +8,7 @@
 
    Tools/mysqlDirRemove.md
    Tools/mysqlAcessDenied.md
+   Tools/chaosblade.md
    
 ##############################################################
 特性类
