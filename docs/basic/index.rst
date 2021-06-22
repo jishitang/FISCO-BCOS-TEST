@@ -4,4 +4,5 @@
    :hidden:
    :maxdepth: 1
    
-   index.rst
+   defect.md
+   chaosblade.md
