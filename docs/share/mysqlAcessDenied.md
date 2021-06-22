@@ -1,5 +1,7 @@
 # Mysql无法登录
-## 忘记root密码
+本文主要介绍2种场景导致的无法登录：忘记root密码、数据库文件损坏。
+
+## 1.忘记root密码导致无法登录
 当登陆mysql输入的密码错误时，提示Access denied，可以通过重置密码进行修复(以mariadb为例)。
 ```Bash
 [jolycao2@VM_108_46_centos ~]$ mysql -uroot -p12345
@@ -58,7 +60,7 @@ MariaDB [(none)]>
 sudo systemctl restart mariadb.service
 ```
 
-## 数据库损坏导致无法登陆
+## 2.数据库损坏导致无法登陆
 mysql数据库损坏，如数据文件被删除，此时可以通过重装mysql解决。
 
 ### 停止服务
