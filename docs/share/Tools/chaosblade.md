@@ -60,18 +60,18 @@ ChaosBlade有丰富的故障注入功能，部分故障对一些复杂的linux�
  ![](../../../images/others/blade_create_h.png)
 
 ## 模拟CPU特定负载
-Chaosblade利用消耗CPU时间片来模拟CPU具体的使用率：可以模拟CPU满载、可以指定几个内核注入该故障、可以指定具体哪些内核注入故障、可以指定CPU具体负载百分比。目的是为了验证系统在特定CPU负载下的表现以及弹性伸缩能力等。模拟CPU负载的相关参数如下：<br/>
+Chaosblade利用消耗CPU时间片来模拟CPU具体的使用率：可以模拟CPU满载、可以指定几个内核注入该故障、可以指定具体哪些内核注入故障、可以指定CPU具体负载百分比。目的是为了验证系统在特定CPU负载下的表现以及弹性伸缩能力等。模拟CPU负载的相关参数如下：
 - ``--timeout string``   设定运行时长，单位是秒，通用参数
 - ``--cpu-count string``     指定 CPU 满载的个数
 - ``--cpu-list string``      指定 CPU 满载的具体核，核索引从 0 开始 (0-3 or 1,3)
 - ``--cpu-percent string``   指定 CPU 负载百分比，取值在 0-100
 
-### 1.注入CPU满载故障./blade create cpu fullload：
+#### 1.注入CPU满载故障
 注入故障前，top命令查看CPU idle为95.6%：
 ```
 %Cpu(s):  2.9 us,  1.5 sy,  0.0 ni, 95.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 ```
-注入cpu满载故障（返回success为true表示注入故障成功。红色部分id即UID，在解除故障时需要用到）：
+注入cpu满载故障（./blade create cpu fullload,返回"success":true表示注入故障成功。result后的id即UID，在解除故障时需要用到）：
 ```Bash
 [lifang@VM_144_109_centos chaosblade-0.7.0]$ ./blade create cpu fullload
 {"code":200,"success":true,"result":"95602e1c3107724c"}
@@ -90,8 +90,8 @@ KiB Swap:        0 total,        0 free,        0 used. 13409488 avail Mem
 {"code":200,"success":true,"result":{"Target":"cpu","Scope":"","ActionName":"fullload","ActionFlags":{},"ActionPrograms":null}}
 ```
 
-### 2.指定随机两个内核满载故障./blade create cpu fullload --cpu-count 2
-注入故障后，top命令查看各个内核使用率，随机指定的cpu1、cpu3已被耗尽：
+#### 2.随机指定两个内核满载故障
+命令：./blade create cpu fullload --cpu-count 2。注入故障后，top命令查看各个内核使用率，随机指定的cpu1、cpu3已被耗尽：
 ``` Bash
 Tasks: 170 total,   1 running, 169 sleeping,   0 stopped,   0 zombie
 %Cpu0  :  0.9 us,  0.9 sy,  0.0 ni, 98.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
@@ -103,8 +103,8 @@ Tasks: 170 total,   1 running, 169 sleeping,   0 stopped,   0 zombie
 %Cpu6  :  0.5 us,  0.5 sy,  0.0 ni, 99.1 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 %Cpu7  :  0.5 us,  0.5 sy,  0.0 ni, 99.1 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 ```
-### 3.指定具体某些内核满载：./blade create cpu fullload --cpu-list 2
-注入故障后，可看出cpu2已被耗尽：
+#### 3.指定具体某些内核满载
+命令：./blade create cpu fullload --cpu-list 2。注入故障后，可看出cpu2已被耗尽：
 ```Bash
 %Cpu0  :  6.0 us,  2.3 sy,  0.0 ni, 91.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 %Cpu1  :  1.7 us,  1.7 sy,  0.0 ni, 96.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
@@ -115,7 +115,8 @@ Tasks: 170 total,   1 running, 169 sleeping,   0 stopped,   0 zombie
 %Cpu6  :  6.0 us,  2.7 sy,  0.0 ni, 91.4 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 %Cpu7  :  8.3 us,  0.7 sy,  0.0 ni, 91.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 ```
-### 4.若测试过程中需要关注系统在不同负载场景下的表现，工具也可以指定具体的CPU负载百分比，如指定80%负载：./blade create cpu fullload --cpu-percent 80
+#### 4.指定具体的CPU负载百分比
+若测试过程中需要关注系统在不同负载场景下的表现，工具也可以指定具体的CPU负载百分比，如指定80%负载：./blade create cpu fullload --cpu-percent 80
 注入故障后，可看出cpu总体使用率大概80%，剩余cpu idle 大概20%，会有少许误差：
 ```Bash
 %Cpu(s): 16.8 us, 62.7 sy,  0.0 ni, 20.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
@@ -133,18 +134,18 @@ Chaosbale内部通过dd命令实现提升磁盘读、写IO，可以指定受影�
 [lifang@VM_144_109_centos chaosblade-0.7.0]$ df -lh|grep data
 /dev/vdb        493G  377G   91G  81% /data
 ```
-### 1.提升磁盘读IO：./blade create disk burn --read --path /data/home/lifang
-注入故障前，可以用iostat -x 1命令监控磁盘IO，iowait为0，IO负荷基本为0：
+#### 1.提升磁盘读IO
+命令：./blade create disk burn --read --path /data/home/lifang。注入故障前，可以用iostat -x 1命令监控磁盘IO，iowait为0，IO负荷基本为0：
   ![](../../../images/others/iostat_x_1_before.png)
 
 注入故障后，再次用iostat -x 1命令监控磁盘IO，可发现：故障后vdb磁盘产生的读IO请求多，导致iowait较之前增大，IO基本满负荷。
   ![](../../../images/others/iostat_x_1_after.png)
 
-### 2.提升磁盘写IO：./blade create disk burn --write --path /data/home/lifang
-注入故障后磁盘IO如下，故障后vdb磁盘产生的写IO请求多，iowait较之前增大，磁盘使用率达80%+。
+#### 2.提升磁盘写IO
+命令：./blade create disk burn --write --path /data/home/lifang。注入故障后磁盘IO如下，故障后vdb磁盘产生的写IO请求多，iowait较之前增大，磁盘使用率达80%+。
   ![](../../../images/others/iostat_x_1_write.png)
 
-Chaosblade工具也可同时提升磁盘的读写IO，./blade create disk burn --read --write --path /data/home/lifang，需要时可以模拟看下效果，此处不再介绍。<br/>
+Chaosblade工具也可同时提升磁盘的读写IO，命令：./blade create disk burn --read --write --path /data/home/lifang，需要时可以模拟看下效果，此处不再介绍。<br/><br/>
 在区块链测试时，节点的所有目录只用到了一个磁盘，验证时需要检查：当节点所在磁盘IO使用率很高时，节点异常不参与打包共识，但当故障解除后，节点应能立即开始同步状态，待同步状态OK后正常参与业务打包共识。当服务器上其他磁盘IO高时，节点应不受影响，能正常工作。
 
 ## 模拟磁盘目录使用率
@@ -179,12 +180,12 @@ Chaosblade可以模拟服务器内存占用过高的场景，内部通过两种�
 - ``--rate string`` 内存占用速率，单位是 MB/S，仅在 --mode ram 时生效
 - ``--timeout string``   设定运行时长，单位是秒，通用参数
 
-命令参考./blade c mem load --mode cache --mem-percent 100 --timeout 300。<br/>
-故障注入后，可以通过top命令或者free -m命令查看剩余内存。需要注意：触发内存占用满时，即使指定了--timeout参数，也可能出现通过blade工具无法恢复的情况，之前模拟时遇到过好几次都是不能恢复，此时可以通过重启服务器解决。<br/>
+命令参考./blade c mem load --mode cache --mem-percent 100 --timeout 300。<br/><br/>
+故障注入后，可以通过top命令或者free -m命令查看剩余内存。需要注意：触发内存占用满时，即使指定了--timeout参数，也可能出现通过blade工具无法恢复的情况，之前模拟时遇到过好几次都是不能恢复，此时可以通过重启服务器解决。<br/><br/>
 在区块链系统中，当节点所在服务器内存太高甚至耗尽时，操作系统会很卡，节点不能参与正常打包共识。故障撤销后，节点会开始同步状态，待同步OK后正常参与业务打包共识。
 
 ## 模拟进程异常
-Chaosblade可以模拟进程终止（验证系统的故障隔离能力）、进程暂停场景（验证系统某节点hang死时，系统的容错能力）。进程终止是通过kill -9 PID实现，进程暂停是通过kill -STOP PID实现，进程暂停恢复通过kill -CONT PIDS现，这里直接使用linux命令操作会比工具更方便。<br/>
+Chaosblade可以模拟进程终止（验证系统的故障隔离能力）、进程暂停场景（验证系统某节点hang死时，系统的容错能力）。进程终止是通过kill -9 PID实现，进程暂停是通过kill -STOP PID实现，进程暂停恢复通过kill -CONT PIDS现，这里直接使用linux命令操作会比工具更方便。<br/><br/>
 测试中需要注意的是，正常时进程是S状态，能正常处理业务。进程暂停后，进程状态会变为T状态，没有时间片运行代码，不能处理业务。但当进程暂停故障恢复后，系统应能自动恢复正常，满足基本可靠性能力。
 ```Bash
 [lifang@VM_144_109_centos chaosblade-0.7.0]$ ps -aux |grep 47829|grep fis
@@ -202,11 +203,12 @@ lifang    47829 17.2  6.1 2196048 1002588 ?     Sl   Sep21 6229:23 /data/home/li
 ```
 
 ## 模拟网络异常
-Chaosblade可模拟常见的网络异常，如网络延迟、网络丢包、网络包重复、网络包损坏、网络包乱序、网络本地端口占用等，主要是验证网络异常的情况下，系统的自我容错能力。需注意网络相关的故障需要用root用户模拟，实名用户没有权限操作。网络相关的故障参数较多，这里不再介绍，需要的可通过./blade create network -h查看。
+Chaosblade可模拟常见的网络异常，如网络延迟、网络丢包、网络包重复、网络包损坏、网络包乱序、网络本地端口占用等，主要是验证网络异常的情况下，系统的自我容错能力。<br/><br/>
+需注意网络相关的故障需要用root用户模拟，实名用户没有权限操作。网络相关的故障参数较多，这里不再介绍，需要的可通过./blade create network -h查看。
 
-### 1.网络延迟
-工具内部通过tc命令实现。延迟的时候可以指定网卡、本地或远程端口、目标IP。需注意，如果不指定端口、ip 参数，而是整个网卡延迟，切记要加--timeout参数或者--exclude-port参数，前者是指定运行时间，自动停止销毁实验，后者是指定排除掉的延迟端口，两者都是防止因延迟时间设置太长，造成机器无法连接的情况。如果确实忘记带这俩参数，后续可通过重启服务器恢复。<br/><br/>
-
+#### 1.网络延迟
+工具内部通过tc命令实现。延迟的时候可以指定网卡、本地或远程端口、目标IP。<br/><br/>
+需注意，如果不指定端口、ip 参数，而是整个网卡延迟，切记要加--timeout参数或者--exclude-port参数，前者是指定运行时间，自动停止销毁实验，后者是指定排除掉的延迟端口，两者都是防止因延迟时间设置太长，造成机器无法连接的情况。如果确实忘记带这俩参数，后续可通过重启服务器恢复。<br/><br/>
 如模拟本机与172.16.144.64机器之间网络延迟5秒。正常网络连接时，两台机器间时延很小：<br/>
 ```Bash
 64 bytes from 172.16.144.64: icmp_seq=57 ttl=64 time=0.239 ms
@@ -225,8 +227,9 @@ PING 172.16.144.64 (172.16.144.64) 56(84) bytes of data.
 64 bytes from 172.16.144.64: icmp_seq=3 ttl=64 time=5008 ms
 ```
 
-### 2.网络丢包
-可以指定网卡、本地端口、远程端口、目标 IP 丢包。需注意，如果不指定端口、ip 参数，而是整个网卡丢包，切记要添加--timeout参数或者--exclude-port参数，两者都是防止因丢包率设置太高，造成机器无法连接的情况，如果真实发生此问题，重启机器即可。<br/><br/>
+#### 2.网络丢包
+可以指定网卡、本地端口、远程端口、目标 IP 丢包。<br/><br/>
+需注意，如果不指定端口、ip 参数，而是整个网卡丢包，切记要添加--timeout参数或者--exclude-port参数，两者都是防止因丢包率设置太高，造成机器无法连接的情况，如果真实发生此问题，重启机器即可。<br/><br/>
 正常时，通过mtr命令查看两个服务器之间网络丢包情况，其中Loss%表示丢包率：
 ```Bash
 [lifang@VM_144_109_centos chaosblade-0.7.0]$ mtr -n --report 172.16.144.64
@@ -255,7 +258,7 @@ HOST: VM_144_109_centos           Loss%   Snt   Last   Avg  Best  Wrst StDev
   1.|-- 172.16.144.64             60.0%    10    0.3   0.3   0.2   0.3   0.0
 ```
 
-### 3.网络包重复
+#### 3.网络包重复
 可以指定网卡、本地端口、远程端口、目标IP包重复。同前面一样，如果不指定端口、ip参数，而是整个网卡包重复，切记要添加--timeout参数或者--exclude-port参数。<br/><br/>
 模拟本机与172.16.144.64之间网络包重复：
 ```Bash
@@ -282,6 +285,7 @@ ping命令查看结果：
 
 ## 其他
 Chaosblade工具也可模拟docker、kubernetes、java相关的故障，这里简单列举下当前的功能，需要用到的可以自行./blade create -h查看具体使用方法。<br/>
+
 Chaosblade工具也可模拟docker相关的故障，比如杀容器，容器网络延迟、丢包，杀容器里的进程等，不同的场景依赖的参数不同，目前支持以下实验场景：<br/>
 blade create docker container 容器自身场景，比如杀容器<br/>
 blade create docker cpu 容器内CPU负载场景<br/>
