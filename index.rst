@@ -70,7 +70,7 @@ FISCO BCOS作为业界颇具影响力的区块链底层平台，每一个接口�
    :maxdepth: 1
    :caption: 经验文档
    
-   docs/share/index.rst
+   docs/share_tools/index.rst
    
    
    
