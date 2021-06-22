@@ -18,4 +18,4 @@
 .. toctree::
    :hidden:
 
-   Tools/chaosblade.md
+   Tools/mysqlDirRemove.md
