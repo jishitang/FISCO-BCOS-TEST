@@ -6,32 +6,34 @@
 
 ### 测试范围
 本次自动化用例设计预计覆盖如下测试点（其中部分功能点还未实现），包括节点、console、java-sdk3大类。节点主要从组网类型、操作系统、节点类型、多群组、存储类型、加密类型、连接同步共识、以及大数据量、兼容性等方面展开。console部分主要包括当前所支持的所有命令、历史问题单中重要的场景、历史搜集的solidity合约、客户端与直连节点间的交互等测试点。java-sdk主要包括4种合约类型、客户端与直连节点交互、一定压测背景下的各种操作等。<br/>
-![](../images/others/autotestScope.png)<br/>
+![](../../images/others/autotestScope.png)<br/>
+![](../../images/node_management/multi_ledger_example.png)
+
 
 ### 组网
 自动化环境一共有A、B、C、D、E、F、G 7个节点，2个group，其中g1有7个节点（A、B、C、D、E、F、G）,g2有4个节点（A、C、F、G）。正常情况下，节点间是两两网络互通的。<br/>
 
 自动化环境节点间连接IP采用内外网混合模式，Port为外网port。本文以如下组网配置为例，覆盖多群组和不同存储方式（所有节点和客户端分布在4台服务器上：服务器1上有2个节点，服务器2上有1个节点，服务器3上有3个节点，服务器4上有1个节点和2个客户端）。<br/>
-![](../images/others/AutotestEnv.png)<br/>
+![](../../images/others/AutotestEnv.png)<br/>
 
 ### 自动化用例
 #### 目录、用例命名规范
 目前自动化用例目录结构如下。所有用例在同一个1级目录下，2级目录命名方式参考“0-环境安装”格式：1位数字序号+“-”+特性名称。3级目录格式为：2位数字序号+“-”+功能点，其中第1位数字是2级目录的序号。<br/>
-![](../images/others/autoCaseDirectory.png)<br/>
+![](../../images/others/autoCaseDirectory.png)<br/>
 
 用例命名格式为：3级目录序号+000开始的3位数字序号+用例场景简短描述，如下图所示。<br/>
-![](../images/others/aotoCaseName.png)<br/>
+![](../../images/others/aotoCaseName.png)<br/>
 
 #### 用例结构
 下图是一个完整的自动化用例，验证场景：账户有运维权限才能部署合约，无运维权限部署合约失败。此处以该用例为例介绍用例结构。<br/>
-![](../images/others/autoCaseStructure1.png)<br/>
+![](../../images/others/autoCaseStructure1.png)<br/>
 
-![](../images/others/autoCaseStructure2.png)<br/>
+![](../../images/others/autoCaseStructure2.png)<br/>
 
 将上述用例拆分为红框内3部分：<br/>
 1. 获取全局变量，初始化环境：获取该用例需要用到的全局变量，转化为用例的内部变量。回收相关账户对应的权限，避免用例后续步骤中赋权失败。其中全局变量获取格式如下，输入参数为事先配置的全局变量，输出参数为用例中定义的变量。输入参数和输出参数一一对应，即输入参数的item 1对应输出参数的item11.如果用例中某变量既有全局变量给它映射值，又有在用例中赋值，此时全局变量映射的值优先级更高。<br/><br/>
 
-![](../images/others/AutoCaseGlobalkey.png)<br/>
+![](../../images/others/AutoCaseGlobalkey.png)<br/>
 
 2. 用例具体操作步骤及结果校验：用例验证场景的具体实施步骤以及每个步骤的结果校验。<br/><br/>
 3. Cleanup环境回滚：如果用例中涉及对环境的修改，且该修改会影响其他用例的执行结果时，需要在用例末尾添加环境回滚的步骤。环境回滚的相关步骤应放在cleanup的逻辑中（因为无论前面用例步骤执行是否成功，只要放到cleanup中的步骤都会被执行到）。<br/><br/>
@@ -51,24 +53,24 @@
 ### 配置自动化定时执行
 定时执行即在配置的时间点自动触发自动化用例执行。当前我们主要是因为如下场景使用到定时执行能力。由于节点支持国密、非国密，且国密节点又支持国密ssl、非国密ssl，而我们每次搭建环境只能覆盖到一种类型，因此我们可以在当前非国密环境批跑完自动化用例后，重新修改全局变量的值，搭建国密环境再一次批跑自动化用例。这里第二次批跑自动化用例的时候就会用到定时执行能力。<br/><br/>
 在测试管理—>定时执行配置菜单页新增配置：<br/>
-![](../images/others/autoCaseConfigure1.png)<br/>
+![](../../images/others/autoCaseConfigure1.png)<br/>
 
 定时执行配置详情如下，配置好时间计划、关联已有的自动化计划即可。<br/><br/>
-![](../images/others/autoCaseConfigure2.png)<br/>
+![](../../images/others/autoCaseConfigure2.png)<br/>
 其中时间计划项配置参考如下Cron表达式格式（配置好后点击右边的校验表达式可以检查下时间配置是否正确）：<br/>
 Cron表达式是一个字符串，字符串以 5或6个空格隔开，分为 6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：<br/>
 (1) Seconds Minutes Hours DayofMonth Month DayofWeek Year<br/>
 (2) Seconds Minutes Hours DayofMonth Month DayofWeek<br/>
 cron从左到右（用空格隔开）: 分 小时 月份中的日期 月份 星期中的日期 年份<br/>
 表达式各字段的含义如下：<br/>
-![](../images/others/autoCaseConfigure3.png)<br/>
+![](../../images/others/autoCaseConfigure3.png)<br/>
 ### 部署Agent后配置文件修改
 之前通过测试平台执行console命令时经常遇到卡死现象，为了解决这一问题，平台提供了agent模块。部署agent后需要修改如下3处配置项：<br/>
 1. start.sh中APP_HOME值：
-![](../images/others/autoCaseAgent1.png)<br/>
+![](../../images/others/autoCaseAgent1.png)<br/>
 
 2. logback.xml中log_path值：
-![](../images/others/autoCaseAgent2.png)<br/>
+![](../../images/others/autoCaseAgent2.png)<br/>
 
 3. application.properties中server.port配置为没有被占用的端口：
-![](../images/others/autoCaseAgent3.png)<br/>
+![](../../images/others/autoCaseAgent3.png)<br/>
