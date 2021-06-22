@@ -6,6 +6,6 @@
 .. toctree::
    :maxdepth: 1
 
-   Tools/chaosblade.md
-   Tools/mysqlDirRemove.md
-   Tools/mysqlAcessDenied.md
+   chaosblade.md
+   mysqlDirRemove.md
+   mysqlAcessDenied.md
