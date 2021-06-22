@@ -6,5 +6,6 @@
 .. toctree::
    :hidden:
 
-   经验文档1.md
+   mysqlDirRemove.md
+   mysqlAcessDenied.md
 
