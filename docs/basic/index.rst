@@ -5,4 +5,3 @@
    :maxdepth: 1
    
    defect.md
-   chaosblade.md
