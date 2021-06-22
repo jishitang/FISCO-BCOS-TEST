@@ -4,18 +4,8 @@
 工具类经验文档介绍。
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
+   Tools/chaosblade.md
    Tools/mysqlDirRemove.md
    Tools/mysqlAcessDenied.md
-   Tools/chaosblade.md
-   
-##############################################################
-特性类
-##############################################################
-业务特性类经验文档介绍。
-
-.. toctree::
-   :hidden:
-
-   Tools/mysqlDirRemove.md
