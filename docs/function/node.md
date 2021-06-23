@@ -5,29 +5,30 @@
 
 ## 节点类型
 ### 游离节点
-游离节点指已启动，还未加入群组的节点，不能获取链上的数据。新扩容的节点在启动后，加入群组前就是游离节点。<br/>
+游离节点指已启动，还未加入群组的节点。新扩容的节点在启动后，加入群组前就是游离节点。<br/>
 console提供了removeNode命令将共识/观察节点设置为游离节点。<br/>
 
 对于游离节点，需考虑如下场景：<br>
-（1）正常场景下，针对共识/观察节点可以removeNode成功。<br>
+（1）针对共识/观察节点可以removeNode成功。<br>
 （2）客户端（如java-sdk）配置的直连节点为游离节点，该直连节点不能接受客户端发过来的请求。<br>
+（3）游离节点不同步链上数据。<br>
 
 ### 观察节点
 观察节点不能参与共识，但能实时同步链上的数据。<br/>
 console提供了addObserver命令将共识/游离节点设置为观察节点，getObserverList命令查看当前group的观察节点列表。<br/>
 
 对于观察节点，需考虑如下因素：<br>
-（1）正常场景下，针对游离/共识节点addObserver成功。节点被设置为观察节点后，不会参与打包出块，能实时同步链上数据。<br>
+（1）针对游离/共识节点addObserver成功。节点被设置为观察节点后，不参与打包出块，能实时同步链上数据。<br>
 （2）console在addObserver时未校验是否在节点的P2P连接列表中，即游离节点未启动，addObserver也能成功（go sdk有校验）。<br>
 （3）共识/游离节点未启动（即不在节点的P2P连接列表中），addObserver可成功。<br>
 （4）客户端（如java-sdk）配置的直连节点为观察节点，该直连节点能接受客户端发过来的交易转发给其他节点。<br>
 
 ### 共识节点
-共识节点是指可以参与群组共识，拥有群组的所有数据，能正常工作的节点，搭链时默认生成的都是共识节点。<br/>
+共识节点可以参与群组共识，拥有群组的所有数据，能正常工作。搭链时默认生成的都是共识节点。<br/>
 console提供了addSealer命令将观察/游离节点设置为共识节点，getSealerList命令查看当前group的共识节点列表。<br/>
 
 针对共识节点，需注意（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
-（1）正常场景下，对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。<br>
+（1）对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。<br>
 （2）观察节点已同步到链上最新数据，addSealer后可正常工作。<br>
 （3）观察节点未同步到链上最新数据，addSealer后会继续同步数据，数据同步完成后正常工作。<br>
 （4）游离/观察节点未启动，addSealer时错误提示信息合理。<br>
@@ -47,14 +48,14 @@ console提供了addSealer命令将观察/游离节点设置为共识节点，get
 ## group管理
 多群组架构中，基于具体业务场景，节点可以根据业务关系选择群组加入，参与到相关账本的数据共享和共识过程中。一个节点下的各群组独立运作，互不影响，各群组有自己独立的账本。console提供了相关命令来管理节点group。<br/>
 
-#### 创建群组
+### 创建群组
 generateGroup、generateGroupFromFile：为指定节点动态创建一个新群组。<br/>
 + 指定节点必须为console直连节点（即在getAvailableConnections的返回结果中）才能创建成功。创建群组后，会在该节点下生成conf/group.x.genesis、conf/group.x.ini文件和data/groupx目录。
 + 若新group的sealerList只有一个节点，创建成功后可直接startGroup，然后在新group上部署合约调用合约。
 + 若新group的sealerList有多个节点，generateGroup命令中通过空格分隔，generateGroupFromFile通过逗号分隔，需要在每个节点对应的console都执行generateGroup/generateGroupFromFile操作。
 + generateGroupFromFile中groupPeers有多个时，各个节点的创建结果应互不影响（即groupPeers配置了A、B节点，A节点的新group创建失败不影响B节点新group创建）。<br/>
 
-#### 启、停、删除、恢复群组
+### 启、停、删除、恢复群组
 startGroup：为指定节点启动群组。<br/>
 queryGroupStatus：查看指定节点相关群组的状态。<br/>
 stopGroup：为指定节点停止群组。<br/>
