@@ -48,7 +48,7 @@ wget https://github.com/chaosblade-io/chaosblade/releases/download/v0.7.0/chaosb
 ChaosBlade有丰富的故障注入功能，部分故障对一些复杂的linux命令进行了封装，使用起来更简单。本文介绍几种简单常用的故障，后续大家需要用到其他的故障时可以自行深入研究。<br/>
 
 执行 ./blade help 或./blade -h可以查看当前版本支持哪些命令：<br/>
- ![](../../../images/others/blade_h.png)
+ ![](../../images/others/blade_h.png)
 
 对几个常用命令解释如下：
 - ``create：``也可以简写为c，创建一个混沌演练实验，也即执行故障注入。命令格式./blade create [TARGET] [ACTION] [FLAGS]，比如模拟一次CPU2内核cpu耗尽，则执行的命令为./blade create cpu fullload --cpu-list 2，如果注入成功，则返回实验的uid，用于状态查询和销毁此实验使用。
@@ -57,7 +57,7 @@ ChaosBlade有丰富的故障注入功能，部分故障对一些复杂的linux�
 - ``Revoke：``也可简写为r，撤销之前故障的准备，比如卸载java agent。命令是./blade revoke UID。
 - ``Status：``也可简写为s，查询准备阶段或者实验的状态，命令是./blade status UID或者./blade status --type create。<br/><br/>
 所有的命令都可以添加 -h 来查看此命令如何使用，如创建故障：
- ![](../../../images/others/blade_create_h.png)
+ ![](../../images/others/blade_create_h.png)
 
 ## 模拟CPU特定负载
 Chaosblade利用消耗CPU时间片来模拟CPU具体的使用率：可以模拟CPU满载、可以指定几个内核注入该故障、可以指定具体哪些内核注入故障、可以指定CPU具体负载百分比。目的是为了验证系统在特定CPU负载下的表现以及弹性伸缩能力等。模拟CPU负载的相关参数如下：
@@ -136,14 +136,14 @@ Chaosbale内部通过dd命令实现提升磁盘读、写IO，可以指定受影�
 ```
 #### 1.提升磁盘读IO
 命令：./blade create disk burn --read --path /data/home/lifang。注入故障前，可以用iostat -x 1命令监控磁盘IO，iowait为0，IO负荷基本为0：
-  ![](../../../images/others/iostat_x_1_before.png)
+  ![](../../images/others/iostat_x_1_before.png)
 
 注入故障后，再次用iostat -x 1命令监控磁盘IO，可发现：故障后vdb磁盘产生的读IO请求多，导致iowait较之前增大，IO基本满负荷。
-  ![](../../../images/others/iostat_x_1_after.png)
+  ![](../../images/others/iostat_x_1_after.png)
 
 #### 2.提升磁盘写IO
 命令：./blade create disk burn --write --path /data/home/lifang。注入故障后磁盘IO如下，故障后vdb磁盘产生的写IO请求多，iowait较之前增大，磁盘使用率达80%+。
-  ![](../../../images/others/iostat_x_1_write.png)
+  ![](../../images/others/iostat_x_1_write.png)
 
 Chaosblade工具也可同时提升磁盘的读写IO，命令：./blade create disk burn --read --write --path /data/home/lifang，需要时可以模拟看下效果，此处不再介绍。<br/><br/>
 在区块链测试时，节点的所有目录只用到了一个磁盘，验证时需要检查：当节点所在磁盘IO使用率很高时，节点异常不参与打包共识，但当故障解除后，节点应能立即开始同步状态，待同步状态OK后正常参与业务打包共识。当服务器上其他磁盘IO高时，节点应不受影响，能正常工作。
