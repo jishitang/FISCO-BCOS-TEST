@@ -10,7 +10,7 @@ ERROR 1045 (28000): Access denied for user 'root'@'localhost'
 ```
 ### 修改/etc/my.cnf文件
 在/etc/my.cnf中添加入如下配置项，用户可以无需密码就可以登陆数据库。
-![](../../../images/others/mysqlAccessDenied_cnf.png)<br/>
+![](../../images/others/mysqlAccessDenied_cnf.png)<br/>
 
 ### 登陆数据库
 ```Bash
