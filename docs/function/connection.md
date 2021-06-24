@@ -1,10 +1,13 @@
-# 连接(OK)
+# 连接
 区块链作为一个去中心化的分布式系统，由多个节点互相连接而成。链上的多个节点之间彼此连接，构成一个P2P网络，因此连接尤为重要，节点间任一网络抖动都可能影响到区块链的正常工作，而连接也是各节点相互协作同步共识的前提条件。只有连接正常，才能保证后续的交易、共识、同步等功能特性正常展开。区块链中的连接主要包括节点间P2P连接、客户端与节点间连接。
 
 ## 节点间P2P连接配置
-FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：node.key（节点密钥，ECC格式）、node.crt（节点证书，由CA颁发）、ca.crt（CA证书，由CA机构提供）。
+FISCO BCOS P2P模块能提供高效、通用和安全的网络通信基础功能，节点间P2P连接是节点间通信、同步、共识的前提。通常情况下，一个节点要加入区块链网络，需要准备三个证书文件：
+- node.key（节点密钥，ECC格式）
+- node.crt（节点证书，由CA颁发）
+- ca.crt（CA证书，由CA机构提供）
 
-FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置（listen_ip若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。）：<br>
+FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接。建立连接时，会使用CA证书进行认证，节点间是TCP长连接，在系统故障、网络异常时，能主动发起重连。节点间的P2P连接通过config.ini文件中[p2p]部分配置：<br>
 ```Bash
 [lifang@VM_153_29_centos node0]$ cat config.ini 
 [p2p]
@@ -18,6 +21,7 @@ FISCO BCOS中节点间通过IP（内外网均支持）和P2P Port进行P2P连接
     node.4=172.16.153.29:20801
     node.5=172.16.153.21:20802
     node.6=172.16.153.45:20801
+    listen_ip若配置为0.0.0.0，表示监听本机所有的地址，包括本地、内外网地址。若配置为127.0.0.1，其他服务器的节点不能访问该节点。
 ```
 
 节点启动后，可以通过日志中如下关键字查看节点间连接状态，如下日志表示该节点跟其他6个节点有P2P连接：<br>
@@ -94,7 +98,8 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     disable_dynamic_group=false
 ```
 
-客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例（console也类似）。客户端侧的配置包括节点的IP、Port以及证书：客户端config.toml中network部分配置IP、Port信息，此处可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。cryptoMaterial部分配置相关证书路径，如下为默认值。如果Java SDK/console跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
+客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例。客户端侧的配置包括节点的IP、Port以及证书：<br/>
+config.toml中network部分配置IP、Port信息，可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。<br/>cryptoMaterial部分配置相关证书路径，如果Java SDK跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
 ```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
 [cryptoMaterial]
