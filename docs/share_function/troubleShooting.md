@@ -60,7 +60,10 @@ Console通过Java SDK与区块链节点建立连接，实现对区块链节点�
 若直连节点的channel_listen_ip监听127.0.0.1的网段，只能本机的客户端才可以连接，控制台位于不同服务器时无法连接节点，将节点配置文件config.ini中的channel_listen_ip修改为控制台连接节点使用的网段IP，或者将其修改为0.0.0.0。直连节点异常。只有直连节点状态正常才可被成功访问，若访问进程状态异常的节点会导致Console启动时连接节点失败。
 #### 直连节点不包括对应群组
 客户端只能访问所配置直连节点归属的群组，若启动Console或控制台switch命令时访问直连节点不存在的群组，会有类似错误信息：
- 
+```Bash
+$ ./start.sh 3
+Failed to create BcosSDK failed! Please check the node status and the console configuration, error info: create client for group 3 failed! Please check the existence of group 3 of the connected node!
+```
 ### 2.应用操作报错
 Console已经支持100多条命令，这里仅列举常见的几种错误。
 #### SDK白名单
