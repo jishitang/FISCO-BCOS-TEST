@@ -98,8 +98,9 @@ FISCO BCOS区块链对外提供了接口，外部应用可以通过FISCO BCOS的
     disable_dynamic_group=false
 ```
 
-客户端侧也需要针对需要连接的节点做相关配置，此处以Java sdk为例。客户端侧的配置包括节点的IP、Port以及证书：<br/>
-config.toml中network部分配置IP、Port信息，可以配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。<br/>cryptoMaterial部分配置相关证书路径，如果Java SDK跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
+客户端侧也需要针对需要连接的节点做相关配置，客户端侧的配置包括节点的IP、Port以及证书：<br/>
+[network]: 配置IP、Port信息，可配置同一机构下的一个或多个节点，分别对应节点侧的channel_listen_ip和channel_listen_port。<br/>
+[cryptoMaterial]: 配置相关证书路径，若Java SDK跟节点间是国密连接，默认从conf/gm目录下加载相关证书和key；若是非国密连接，默认从conf目录加载相关证书和key，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时会再次尝试用国密连接try to use SM sslContext。
 ```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
 [cryptoMaterial]
