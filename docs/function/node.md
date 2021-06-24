@@ -8,7 +8,7 @@
 游离节点指已启动，还未加入群组的节点。新扩容的节点在启动后，加入群组前就是游离节点。<br/>
 
 console命令：
-+ removeNode--将共识/观察节点设置为游离节点。
+-   removeNode--将共识/观察节点设置为游离节点。
 
 对于游离节点，需考虑如下场景：<br>
 （1）针对共识/观察节点可以removeNode成功。<br>
@@ -19,8 +19,8 @@ console命令：
 观察节点不能参与共识，但能实时同步链上的数据。<br/>
 
 console命令：
-+ addObserver--将共识/游离节点设置为观察节点。
-+ getObserverList--查看当前group的观察节点列表。
+-   addObserver--将共识/游离节点设置为观察节点。
+-   getObserverList--查看当前group的观察节点列表。
 
 对于观察节点，需考虑如下因素：<br>
 （1）针对游离/共识节点addObserver成功。节点被设置为观察节点后，不参与打包出块，能实时同步链上数据。<br>
@@ -33,8 +33,8 @@ console命令：
 console提供了addSealer命令将观察/游离节点设置为共识节点，getSealerList命令查看当前group的共识节点列表。
 
 console命令：
-+ addSealer--将观察/游离节点设置为共识节点
-+ getSealerList--查看当前group的共识节点列表
+-   addSealer--将观察/游离节点设置为共识节点
+-   getSealerList--查看当前group的共识节点列表
 
 针对共识节点，需注意（前提条件：节点被添加到的group能正常工作。各种参数异常的场景就不在此处罗列）：<br>
 （1）对游离/观察节点addSealer成功。节点被设置为共识节点后，能够正常打包出块。<br>
@@ -59,7 +59,7 @@ console命令：
 
 ### 创建群组
 console命令：
-+ generateGroup、generateGroupFromFile--为指定节点动态创建一个新群组
+-   generateGroup、generateGroupFromFile--为指定节点动态创建一个新群组
 
 （1）指定节点必须为console直连节点（即在getAvailableConnections的返回结果中）才能创建成功。创建群组后，会在该节点下生成conf/group.x.genesis、conf/group.x.ini文件和data/groupx目录。<br/>
 （2）若新group的sealerList只有一个节点，创建成功后可直接startGroup，然后在新group上部署合约调用合约。<br/>
@@ -68,11 +68,11 @@ console命令：
 
 ### 启、停、删除、恢复群组
 console命令：
-+ startGroup--为指定节点启动群组
-+ queryGroupStatus--查看指定节点相关群组的状态
-+ stopGroup--为指定节点停止群组
-+ removeGroup--为指定节点删除群组
-+ recoverGroup--为指定节点恢复指定群组
+-   startGroup--为指定节点启动群组
+-   queryGroupStatus--查看指定节点相关群组的状态
+-   stopGroup--为指定节点停止群组
+-   removeGroup--为指定节点删除群组
+-   recoverGroup--为指定节点恢复指定群组
 
 （1）创建群组后默认是STOPPED状态，需要为新group的各个节点启动新群组，启动成功后是RUNNING状态。<br/>
 （2）新群组RUNNING状态的节点个数满足对应共识算法规则时，可以在新群组成功部署、调用合约。<br/>
