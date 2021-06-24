@@ -9,3 +9,4 @@
    chaosblade.md
    mysqlDirRemove.md
    mysqlAcessDenied.md
+   grafana.md
