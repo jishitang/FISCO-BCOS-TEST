@@ -1,4 +1,4 @@
-# 权限(OK)
+# 权限
 从2.5.0版本开始，系统提供了一种基于角色的权限控制模型。委员角色拥有链治理相关的操作权限，用户不需要去具体关注底层系统表对应的权限，只需要关注角色的权限即可。系统默认没有角色账号，当存在一个角色账号时，角色对应的权限检查就会生效。目前细分了如下9个权限，在做权限测试时需要注意相关细节。
 ## grantCommitteeMember
 grantCommitteeMember、revokeCommitteeMember用于添加、删除委员。<br/>
@@ -12,7 +12,8 @@ grantCommitteeMember、revokeCommitteeMember用于添加、删除委员。<br/>
 8. 对委员不能再grant其他权限。
 9. 只有委员可以冻结、解冻账户（freezeAccount、unfreezeAccount）。
 10. 委员可以冻结、解冻任意合约（freezeContract、unfreezeContract）。
-11. 删除委员也类似。<br/><br/>
+11. 删除委员也类似。<br/>
+
 ## grantOperator
 grantOperator、revokeOperator用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
 1. 必须是委员才能添加、删除运维账号，其他角色无权限添加、删除运维账号。
@@ -57,32 +58,38 @@ Empty set.
 ---------------------------------------------------------------------------------------------
  ```
 ## grantCNSManager
-grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS命令不受该权限控制）。<br/>
-1. 初始时所有账号都可以使用CNS。
-2. 存在CNSManager后，仅CNSManager可以使用CNS。其他账号无权限。
+grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS不受该权限控制）。<br/>
+1. 初始时所有账号都可以deployByCNS、registerCNS。
+2. 存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。其他账号无权限。
 3. 账户拥有CNSManager权限后，再对该账户grantDeployAndCreateManager，账户会有Operator权限。
+
 ## grantDeployAndCreateManager
 grantDeployAndCreateManager、revokeDeployAndCreateManager用于给账户添加、删除部署合约和创建用户表的权限。
 1. 初始时所有账号都可以部署合约和创建表。
 2. 存在DeployAndCreateManager后，仅DeployAndCreateManager可以部署合约和创建表，其他无权限账号部署合约、创建用户表失败。
 3. 账户拥有DeployAndCreateManager权限后，再对该账户grantCNSManager，账户会有Operator权限。
+
 ## grantNodeManager
 grantNodeManager、revokeNodeManager用于给账户添加、删除节点管理的权限（指addSealer、addObserver和removeNode操作）。
 1. 初始时系统中无NodeManager，所有账号都可以进行节点管理。
 2. 存在NodeManager后，有权限的账号才可以进行节点管理，其他账号操作失败。
+
 ## grantContractStatusManager
-grantContractStatusManager、revokeContractStatusManager用于已有ContractStatusManager权限的账号给其他账号授予指定合约的合约管理权限。
+grantContractStatusManager、revokeContractStatusManager用于已有ContractStatusManager权限的账号给其他账号授予指定合约的合约管理权限（freezeContract、unfreezeContract）。
 1. 合约部署好后，部署合约的账户默认有ContractStatusManager权限。
 2. 这两条命令的参数可以不带0x前缀。
 3. 每一个合约都必须有一个 ContractStatusManager，合约的最后一个ContractStatusManager不能被revoke。
 4. 只有系统中的委员和拥有ContractStatusManager权限的账号可以对指定的合约进行freezeContract、unfreezeContract操作。
+
 ## grantContractWritePermission
 grantContractWritePermission、revokeContractWritePermission用于给账户添加对合约写接口的调用权限。
 1. 部署合约后，合约的ContractWritePermission为空，所有账户都可以调用合约写接口。
 2. 合约存在ContractWritePermission账户后，其他账户就不能调用该合约的写接口。
+
 ## grantUserTableManager
 grantUserTableManager、revokeUserTableManager用于给账户添加、删除对用户表的写权限。
 1. 建表后不存在UserTableManager，所有账户均拥有对该表的写权限。
 2. 存在UserTableManager后，仅UserTableManager可以insert、update、delete表成功，其他账户无权更新表数据，select不受影响。
+
 ## grantSysConfigManager
-grantSysConfigManager、revokeSysConfigManager用于给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数。
+grantSysConfigManager、revokeSysConfigManager用于给账户添加、删除修改系统参数的权限。初始时所有账户都可以修改系统参数（setSystemConfigByKey命令）。
