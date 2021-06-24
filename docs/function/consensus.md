@@ -14,21 +14,21 @@ FISCO BCOS多群组架构中，不同群组可运行不同的共识算法，组�
 ##### PBFT
 PBFT可以在少数节点作恶(如伪造消息)场景中达成共识，它采用签名、签名验证、哈希等密码学算法确保消息传递过程中的防篡改性、防伪造性、不可抵赖性。
 
-（1）配置文件相关配置测试，如[consensus].max_trans_num、[consensus].enable_dynamic_block_size、consensus_timeout等。 <br/>
-（2）leader节点： <br/>
+（1）配置文件相关配置测试，如[consensus].max_trans_num、[consensus].enable_dynamic_block_size等。 <br/>
+（2）leader节点：
 - 实时压测、交易池内堆积的历史交易，各个共识节点轮流作为leader节点。 
 - 多个客户端同时发送交易到同一群组内的相同/不同直连节点，各个共识节点轮流作为leader。 
 - 观察节点不参与打包，会同步区块，观察/游离节点不影响共识节点轮流作为leader。 
 - 频繁入网、退网，该节点断断续续作为leader。 
 - 网络单向连通，各节点轮流作为leader。 
 - 部分节点网络不通但非网络孤岛，如A\B\C\D 4节点环境，D节点仅跟A节点网络连通，各节点轮流作为leader。 
-- 某共识节点异常，剩余正常节点中，其中一个节点被轮询2次作为leader节点。 
+- 某共识节点异常，剩余正常节点中，其中一个节点被轮询2次作为leader节点。<br/>
 （3）签名、落盘： <br/>
 - 正常共识，各类存储模式，落盘成功。 
 - 超过1000ms新区块打包交易数仍为0，空块不落盘。 
 - 未收集到2f+1个SignMsg。 
-- 未收集到2f+1个CommitMsg。 
-（3）视图共识： <br/>
+- 未收集到2f+1个CommitMsg。  <br/>
+（4）视图共识： <br/>
 - 无业务进来时，空块不落盘，触发视图切换。 
 - 新节点入网、老节点退网入网，触发视图切换。 
 - 因网络问题，其他节点在规定时间内未收到某节点打包的区块，触发视图切换。 
@@ -52,11 +52,14 @@ PBFT可以在少数节点作恶(如伪造消息)场景中达成共识，它采�
 ##### rPBFT
 rPBFT算法类似于部分节点范围内的PBFT算法，每轮共识流程仅选取若干个节点（epoch_sealer_num参数控制）执行PBFT共识流程出块，并根据区块高度（epoch_block_num参数控制）周期性地替换共识节点、保障系统安全。包括共识节点、验证节点两种节点类型。
 
-（1）配置文件所有相关参数测试 <br/>
-（2）epoch_sealer_num等于节点总数 <br/>
-每个周期内所有节点均参与共识，交易处理正常，无需进行共识节点替换。日志中会有类似No need to rotateWorkingSealer for all the sealers are working sealers,workingSealerNum=7,pendingSealerNum=0信息。 <br/>
-（3）epoch_sealer_num小于节点总数 <br/>
-交易处理正常，epoch_sealer_num个共识节点轮流出块。每出epoch_block_num个块后，替换一个共识节点（可搜索日志关键字rotateWorkingSealer,number=查看是否根据epoch_block_num参数周期性替换共识节点。根据calNodeRotatingInfo、remove workingSealer、insert workingSealer日志查看具体替换的节点是否符合对应替换算法的逻辑，根据updateConsensusNodeList关键字查看替换后的共识节点列表）。 <br/>
+（1）配置文件相关参数测试 <br/>
+（2）epoch_sealer_num = 节点总数 <br/>
+每个周期内所有节点均参与共识，无需进行共识节点替换。日志中会有类似No need to rotateWorkingSealer for all the sealers are working sealers,workingSealerNum=7,pendingSealerNum=0信息。 <br/>
+（3）epoch_sealer_num < 节点总数 <br/>
+- epoch_sealer_num个共识节点轮流出块。
+- 每出epoch_block_num个块后，替换一个共识节点。可在日志种搜索rotateWorkingSealer,number= 查看是否根据epoch_block_num参数周期性替换共识节点。
+- 根据calNodeRotatingInfo、remove workingSealer、insert workingSealer日志查看具体替换的节点是否符合对应替换算法的逻辑。
+- 根据updateConsensusNodeList关键字查看替换后的共识节点列表。 <br/>
 （4）epoch_sealer_num小于节点总数时，控制台getSealerList的返回结果包括链上所有的共识节点，不仅仅是epoch_sealer_num范围内的。 <br/>
 （5）周期性替换共识节点时，不会校验即将加入共识列表的验证节点是否异常，直接根据替换算法移除一个节点、加入一个节点。 <br/>
 （6）若验证节点部分异常，替换时加入了异常的验证节点到共识列表，链上如果满足3f+1原则，能正常处理交易，反之不满足，链会异常。 <br/>
