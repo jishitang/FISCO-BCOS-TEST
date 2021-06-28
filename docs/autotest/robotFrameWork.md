@@ -1,5 +1,5 @@
 # robotFrameWork
-Robot Framework（官网地址：https://robotframework.org/）是一个基于Python实现的，可扩展的关键字驱动的开源自动化测试框架，同时支持Python 2和Python 3。Robot框架具有模块化的体系结构：
+[Robot Framework](https://robotframework.org/)是一个基于Python实现的，可扩展的关键字驱动的开源自动化测试框架，同时支持Python 2和Python 3。Robot框架具有模块化的体系结构：<br/>
 ![](../../images/others/robot1.png)
 
 - Robot Framework使用表格语法，可用简单统一的方式创建测试用例。
@@ -9,17 +9,17 @@ Robot Framework（官网地址：https://robotframework.org/）是一个基于Py
 为了让自动化用例编写时更加直观，更容易理解，此次根据fisco-bcos测试的独有特性，在robot framework框架下定制了一套符合FISCO-BCOS测试的一些关键字，使用者需要熟悉FISCO-BCOS底层测试的相关业务，熟悉robot framework内置关键字和定制的FISCO-BCOS专有关键字。<br/>
 
 ## 用例编辑工具Ride
-Robot Framework框架支持多种用例编辑工具，本次选择Ride（https://github.com/robotframework/RIDE/wiki）。需要做如下安装（推荐使用Python3）。
+Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https://github.com/robotframework/RIDE/wiki)。需要做如下安装（推荐使用Python3）。
 
 ### 安装（Python2）
-- 安装python：2.7.18版本， https://www.python.org/downloads/release/python-2718/
+- 安装python：[2.7.18版本](https://www.python.org/downloads/release/python-2718/)
 - 安装robotframework：pip install robotframework==3.2.2
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
 - 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
 - 安装configparser：pip install configparser==5.0.1
 
 ### 安装（Python3）
-- 安装python：3.7.9版本， https://www.python.org/downloads/release/python-379/
+- 安装python：[3.7.9版本](https://www.python.org/downloads/release/python-379/)
 - 安装robotframework：pip install robotframework==3.2.2
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
 - 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
@@ -58,7 +58,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择Ride（https:/
 ![](../../images/others/robot9.png)
 
 ## 用例结构
-用例组成如下，具体可参考官网描述http://robotframework.org/robotframework/2.7.2/RobotFrameworkUserGuide.html#test-case-name-and-documentation。
+用例组成如下，具体可参考[官网描述](http://robotframework.org/robotframework/2.7.2/RobotFrameworkUserGuide.html#test-case-name-and-documentation)。
 ![](../../images/others/robot10.png)
 
 - Documentation：描述用例场景。
@@ -142,7 +142,7 @@ return：字典类型 dict<br/>
 ### 1.	登录机器—login use token/ login normal
 login use token：通过ride工具执行用例，登陆时需要输入token场景使用。<br/>
 login normal：不需要输入token的场景使用。<br/>
-```
+```Bash
 #如果是python2，在登录前需要先指定下字符集为utf-8，因为默认是ascii；如果是python3，该步骤可以忽略
 Evaluate    reload(sys)    modules=sys
 Evaluate    sys.setdefaultencoding("utf-8")    modules=sys
