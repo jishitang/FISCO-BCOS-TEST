@@ -1,6 +1,6 @@
 # robotFrameWork
 [Robot Framework](https://robotframework.org/)是一个基于Python实现的，可扩展的关键字驱动的开源自动化测试框架，同时支持Python 2和Python 3。Robot框架具有模块化的体系结构：<br/>
-<div align=center>![](../../images/others/robot1.png)</div>
+![](../../images/others/robot1.png)
 
 - Robot Framework使用表格语法，可用简单统一的方式创建测试用例。
 - Robot Framework可从现有关键字创建可重复使用的更高级别关键字。 
@@ -362,12 +362,12 @@ ${sel_rst}    execute mysql    ${mysql_info}    select * from test where name="m
 log    ${sel_rst}
 ```
 ### 17.	python sdk安装—install python sdk
-```
+```Bash
 #如果已经安装过pyenv，可以将pyenv_flag=False，节省安装时间
 install python sdk    git_branch=${python_sdk_branch}    remote=${remote_python_sdk}
 ```
 ### 18.	python sdk执行—execute linux command
-```
+```Bash
 #配置环境变量
 Execute Linux Command	eval "$(pyenv init -)" && eval "$(pyenv init --path)" && eval "$(pyenv virtualenv-init -)"
 
