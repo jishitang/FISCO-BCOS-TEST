@@ -94,55 +94,54 @@ Test Log中会记录每个用例的具体执行日志信息：
 
 #### 定时任务调度
 
-## 附录-关键字
-### 内置关键字
+## 附-内置关键字
 存储变量时，如果想对现有结果做一定处理或者获取特殊值，以下内置函数可以直接使用，使用时需要带上前缀“self.”。
-#### 1. timestamp
-获取当前时间戳，返回字符串
+### 1. timestamp
+获取当前时间戳，返回字符串<br/>
 
-#### 2. rdm
-param1：范围开始值，整数
-param2：范围结束值，整数
-return：该范围的随机数，字符串 str
+### 2. rdm
+param1：范围开始值，整数<br/>
+param2：范围结束值，整数<br/>
+return：该范围的随机数，字符串 str<br/>
 
-#### 3. hex2dec
-16进制转10进制
-param1：16进制，字符串，例如 0x1a
-return：10进制，字符串 str
+### 3. hex2dec
+16进制转10进制<br/>
+param1：16进制，字符串，例如 0x1a<br/>
+return：10进制，字符串 str<br/>
 
-#### 4. dec2hex
-10进制转16进制
-param1：10进制，字符串
-return：16进制，字符串 str
+### 4. dec2hex
+10进制转16进制<br/>
+param1：10进制，字符串<br/>
+return：16进制，字符串 str<br/>
 
-#### 5. use_key
-通过关键字匹配结果，这里首先回去匹配等号键值对，如果没找到就匹配冒号键值对
-param1：需要查找的字符串
-param2：关键字，字符串
-return：匹配到的结果数组（可能匹配到多个），list
+### 5. use_key
+通过关键字匹配结果，这里首先回去匹配等号键值对，如果没找到就匹配冒号键值对<br/>
+param1：需要查找的字符串<br/>
+param2：关键字，字符串<br/>
+return：匹配到的结果数组（可能匹配到多个），list<br/>
 
-#### 6. row_num
-指定行号获取值，如果行里面带有等号或者冒号，可以指定具体分隔符来获取值
-param1：需要查找的字符串
-param2：行号，整数
-param3：分隔符：1代表等号，2代表冒号。可不传，则获取该行所有
-return：结果字符串 str
+### 6. row_num
+指定行号获取值，如果行里面带有等号或者冒号，可以指定具体分隔符来获取值<br/>
+param1：需要查找的字符串<br/>
+param2：行号，整数<br/>
+param3：分隔符：1代表等号，2代表冒号。可不传，则获取该行所有<br/>
+return：结果字符串 str<br/>
 
-#### 7. get_account
-调用get_account.sh脚本创建账户的时候获取信息，get_account.sh执行后会返回三行数据
-param1：需要查找的字符串
-param2：第几行，整数
-return 结果字符串 str
+### 7. get_account
+调用get_account.sh脚本创建账户的时候获取信息，get_account.sh执行后会返回三行数据<br/>
+param1：需要查找的字符串<br/>
+param2：第几行，整数<br/>
+return 结果字符串 str<br/>
 
-#### 8. get_json
-解析json，获得json对象
-param1：json格式的字符串
-return：字典类型 dict
+### 8. get_json
+解析json，获得json对象<br/>
+param1：json格式的字符串<br/>
+return：字典类型 dict<br/>
 
-### Fisco Bcos目前自定义关键字
-#### 1.	登录机器—login use token/ login normal
-login use token：通过ride工具执行用例，登陆时需要输入token场景使用。
-login normal：不需要输入token的场景使用。
+## 附-Fisco Bcos自定义关键字
+### 1.	登录机器—login use token/ login normal
+login use token：通过ride工具执行用例，登陆时需要输入token场景使用。<br/>
+login normal：不需要输入token的场景使用。<br/>
 ```
 #如果是python2，在登录前需要先指定下字符集为utf-8，因为默认是ascii；如果是python3，该步骤可以忽略
 Evaluate    reload(sys)    modules=sys
@@ -158,14 +157,17 @@ login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user} 
 #不需要pin和token登录机器
 login normal    ${login_ip}    ${login_user}    ${login_pwd}    dir_deploy=${dir_deploy}
 ```
-#### 2.	清理环境—clean
+### 2.	清理环境—clean
+```
 #清理登录的当前机器，会清理autotest整个目录
 clean
 #清理iplist所有机器，会清理autotest整个目录
 clean    ip_list=${ip_list}
 #只清理节点目录，只会清理autotest下ip目录
 clean    ip_list=${ip_list}    ext=node
-3.	代码拉取—install fisco bcos
+```
+### 3.	代码拉取—install fisco bcos
+```
 #拉代码，并且编译
 install fisco bcos    install_flag=1    git_branch=release-2.7.1
 #拉代码，从ci获取二进制
@@ -180,17 +182,23 @@ install fisco bcos    install_flag=4    remote_fisco=${remote_fisco}
 stop node    ip_list=${ip_list}
 install fisco bcos    install_flag=4    remote_fisco=${remote_fisco}    update_flag=True
 start node    ip_list=${ip_list}
-4.	创建节点—build chain
+```
+### 4.	创建节点—build chain
+```
 #创建节点，build_chain.sh需要增加的参数都可以传入ext中
 build chain    ipconf=${ip_conf}    ext=-T -i -p 30101,30201,8941
 #mysql数据库，数据库名自动生成，即使传入也不会使用
 build chain    ipconf=${ip_conf}    ext=-T -i -p 30101,30201,8941 -s mysql    mysql=${mysql_info}
 #根据指定ip映射，替换config.ini里面的p2p ip信息，可用于外网ip替换
 build chain    ipconf=${ip_conf}    ext=-T -i -p 30101,30201,8941    netmap=${old_ip1}=${new_ip1},${old_ip2}=${new_ip2}
-5.	节点分发—trans node
+```
+### 5.	节点分发—trans node
+```
 #根据iplist分发节点
 trans node    ip_list=${ip_list}
-6.	启动节点—start node
+```
+### 6.	启动节点—start node
+```
 #启动当前登录机器所有节点
 start node
 #启动远程机器的所有节点
@@ -198,7 +206,9 @@ start node    ip_list=${ip_list}
 start node    ip_list=${ip_list}    ext=all
 #启动远程机器所有node0节点
 start node    ip_list=${ip_list}    ext=node0
-7.	停止节点—stop node
+```
+### 7.	停止节点—stop node
+```
 #停止当前登录机器所有节点
 stop node
 #停止远程机器的所有节点
@@ -206,7 +216,9 @@ stop node    ip_list=${ip_list}
 stop node    ip_list=${ip_list}    ext=all
 #停止远程机器所有node0节点
 stop node    ip_list=${ip_list}    ext=node0
-8.	Linux命令行执行—execute linux command
+```
+### 8.	Linux命令行执行—execute linux command
+```
 #执行pwd，将返回数据存储在RF变量output中
 ${output}    execute linux command    pwd
 #当前目录执行a.sh脚本
@@ -217,7 +229,9 @@ execute linux command    curl -X POST --data '{"jsonrpc":"2.0","method":"getBloc
 execute linux command    bash get_account.sh->v_pri_key_pem=self.get_account(output,2)    exec_dir=${dir_console}
 #执行交互式命令，比如创建p12账户，会询问输入两次密码，为了方便自动化，这里设置的密码默认为123456
 execute linux command    bash get_account.sh -p->v_pri_key_p12=self.get_account(output,2)    exec_dir=${dir_console}    interact_input=Password:,123456|Password:,123456
-9.	java-sdk-demo安装—install java sdk demo
+```
+### 9.	java-sdk-demo安装—install java sdk demo
+```
 #安装后，peers只配置protect ip，build_chain时候传入的第一个ip
 install java sdk demo    git_branch=main
 #安装后，peers配置所有ip
@@ -226,7 +240,9 @@ install java sdk demo    git_branch=main    peers=all
 install java sdk demo    git_branch=main    peers=ip1:port1,ip2:port2
 #从远程机器获取，然后安装
 install java sdk demo    git_branch=main    remote=${remote_java_sdk_demo}
-10.	java-sdk-demo调用—execute linux command
+```
+### 10.	java-sdk-demo调用—execute linux command
+```
 #执行后会有返回值，存储在了变量press_out_put中
 ${press_out_put}    execute linux command    java -cp 'apps/*:lib/*:conf/' org.fisco.bcos.sdk.demo.perf.PerformanceOk 50 10 1    exec_dir=${dir_java_sdk_demo}
 #断言，查找变量press_out_put中是否包含字符串“Error rate: 0.0%”，如果包含则用例通过
@@ -234,7 +250,9 @@ Should Contain    ${press_out_put}    Error rate: 0.0%
 
 #循环执行两次
 execute linux command    java -cp 'apps/*:lib/*:conf/' org.fisco.bcos.sdk.demo.perf.PerformanceOk 50 10 1    exec_dir=${dir_java_sdk_demo}    loop_times=2
-11.	console安装—install console
+```
+### 11.	console安装—install console
+```
 #安装后，peers只配置build_chain时候ip_conf传入的第一个ip
 install console    git_branch=master
 #安装后，peers配置所有ip
@@ -243,7 +261,9 @@ install console    git_branch=master    peers=all
 install console    git_branch=master    peers=ip1:port1,ip2:port2
 #从远程机器获取，然后安装
 install console    git_branch=master    remote=${remote_console}
-12.	console调用—execute console command
+```
+### 12.	console调用—execute console command
+```
 #调用deploy HelloWorld，在返回结果中查找关键字“contract address”对应的值，然后将值存储在变量v_addr中，多个console命令用#隔开
 execute console command    deploy HelloWorld->v_addr=self.use_key(output,"contract address")[0];v_t_hash=self.use_key(output,"transaction hash")[0];v_all=v_addr+"|"+v_t_hash#getBlockNumber->v_block_num=output
 #loadAccount p12，加载时会被询问要求输入密码，这里默认会用123456密码去加载, v_pri_key_p12为提前存储在autotest.ini里面的变量
@@ -251,7 +271,9 @@ execute console command    loadAccount var{v_pri_key_p12} p12
 
 #执行结果返回，然后存储到RF变量
 ${rst}    execute console command    deploy HelloWorld
-13.	检查节点日志—check log
+```
+### 13.	检查节点日志—check log
+```
 #检查远程机器所有节点日志是否同时包含关键字“g:1”和“+++”，两次查找间隔时间为6秒，结果返回存储在变量check_log_rst中（tuple类型）
 ${check_log_rst}    check log    ip_list=${ip_list}    ext=all|g:1#+++|6
 #断言，${check_log_rst}[0]为是否找到，${check_log_rst}[1]为找到的整行日志
@@ -259,16 +281,20 @@ Should Be True    ${check_log_rst}[0]
 
 #在node0日志中查找一次关键字“connected count=1”，如果存在则直接返回true
 check log    ip_list=${ip_list}    ext=node0|connected count=1
-14.	删除节点数据—remove node data
+```
+### 14.	删除节点数据—remove node data
+```
 #删除前先停止机器node0节点
 stop node    ip_list=ip,user,password     ext=node0
 #删除机器上node0数据
 remove node data    ip_list=ip,user,password     ext=node0
 #删除后启动机器上node0节点
 start node    ip_list=ip,user,password     ext=node0
-15.	操作配置文件—opt autotest ini/opt cfg for fisco bcos
+```
+### 15.	操作配置文件—opt autotest ini/opt cfg for fisco bcos
 opt autotest ini：读取、修改windows文件autotest.ini。
 opt cfg for fisco bcos：修改linux配置文件
+```
 #操作 autotest.ini，该文件放在windows上，和当前Suite在一个目录
 opt autotest ini    set    name    mark
 ${name}    opt autotest ini    get    name
@@ -288,8 +314,10 @@ opt cfg for fisco bcos    ${dir_autotest}/${ip}/config.ini    set    log    leve
 execute linux command    cd ${dir_autotest}/${ip}
 opt cfg for fisco bcos    group.1.ini    set    storage    db_name    test
 opt cfg for fisco bcos    group.1.ini    del    storage    db_name
-16.	Linux上执行mysql查询—execute mysql
+```
+### 16.	Linux上执行mysql查询—execute mysql
 execute mysql：操作mysql数据库，需要安装pymysql：pip install pymysql
+```
 #查询后的结果中，字段间隔是|，行间隔是！
 ${sel_rst}    execute mysql    ${mysql_info}    select * from test
 log    ${sel_rst}
@@ -298,33 +326,47 @@ ${sel_rst}    execute mysql    ${mysql_info}    select * from test where name='m
 log    ${sel_rst}
 ${sel_rst}    execute mysql    ${mysql_info}    select * from test where name="mark";
 log    ${sel_rst}
-17.	python sdk安装—install python sdk
+```
+### 17.	python sdk安装—install python sdk
+```
 #如果已经安装过pyenv，可以将pyenv_flag=False，节省安装时间
 install python sdk    git_branch=${python_sdk_branch}    remote=${remote_python_sdk}
-18.	python sdk执行—execute linux command
+```
+### 18.	python sdk执行—execute linux command
+```
 #激活python-sdk虚拟环境
 Execute Linux Command    cd ${dir_python_sdk} && source ~/.bashrc && pyenv activate python-sdk
 Execute Linux Command   ./console.py deploy HelloWorld->v_py_contract_addr=self.use_key(output,"contractAddress")[0].replace(",","").replace('"','')
 Execute Linux Command   ./console.py getBlockNumber->v_py_bn=self.row_num(output,4,2)
 #使python-sdk虚拟环境变为非激活状态
 Execute Linux Command    pyenv deactivate python-sdk
-19.	发送邮件—Send Email
+```
+### 19.	发送邮件—Send Email
+```
 Send Email    subject=${e_subject}    from_address=${e_from_address}    password=${e_password}    to_addresses=${e_to_addresses}    smtp_server=${e_smtp_server}    attch_files=${e_attch_files}
-FAQ
-No module named 'exchangelib'
+```
+
+## FAQ
+### No module named 'exchangelib'
 解决办法：python -m pip install exchangelib
-No module named 'selenium'
+
+### No module named 'selenium'
 解决办法：python -m pip install selenium
-No module named 'SeleniumLibrary'
+
+### No module named 'SeleniumLibrary'
 解决办法：pip install robotframework-selenium2library
-Evaluating expression 'reload(sys)' failed: NameError: name 'reload' is not defined
+
+### Evaluating expression 'reload(sys)' failed: NameError: name 'reload' is not defined
 解决办法：Python版本不匹配
-Ride工具正常显示中文字符
+
+### Ride工具正常显示中文字符
 若需在Ride工具中正常显示中文字符，需要修改如下两个配置文件。
+ ![](../../images/others/robot14.png)
  
+ ![](../../images/others/robot15.png)
  
-No module named configparser
-错误提示信息：
+### No module named configparser
+错误提示信息：<br/>
 20210311 10:33:17.407 :  INFO : 
 > import configparser
 > cf = configparser.ConfigParser()
@@ -334,17 +376,19 @@ No module named configparser
 > "
 Traceback (most recent call last):
   File "<string>", line 2, in <module>
-ImportError: No module named configparser
+ImportError: No module named configparser<br/>
 
 解决办法：服务器上安装pip install configparser
-FOR loop contains no keywords
-错误提示信息：
+ 
+### FOR loop contains no keywords
+错误提示信息：<br/>
 20210316 15:58:13.651 :  INFO : ***************check log of g2***************
 20210316 15:58:13.652 :  FAIL : FOR loop contains no keywords.
 20210316 15:58:13.653 :  FAIL : AssertionError
-Ending test:   Test.Mark.环境搭建.检查各节点g1g2共识日志++
+Ending test:   Test.Mark.环境搭建.检查各节点g1g2共识日志++<br/>
 
 解决办法：在FOR循环语句结束行加上关键字END
+ ![](../../images/others/robot16.png)
  
 
 
