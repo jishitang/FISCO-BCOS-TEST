@@ -157,6 +157,38 @@ login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user} 
 #不需要pin和token登录机器
 login normal    ${login_ip}    ${login_user}    ${login_pwd}    dir_deploy=${dir_deploy}
 ```
+
+```Python
+#如果是python2，在登录前需要先指定下字符集为utf-8，因为默认是ascii；如果是python3，该步骤可以忽略
+Evaluate    reload(sys)    modules=sys
+Evaluate    sys.setdefaultencoding("utf-8")    modules=sys
+#设置linux提示符，默认为]$，如果非该提示符的环境，需要进行设置，否则可以忽略
+set prompt    ]#
+#输入pin和token登录机器，支持传入部署目录
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}
+#ssh免密，后面所有ssh和scp操作都免密
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}    no_password=True
+#登录机器后su到指定用户
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}    su_user=${su_user}    su_password=${su_password}
+#不需要pin和token登录机器
+login normal    ${login_ip}    ${login_user}    ${login_pwd}    dir_deploy=${dir_deploy}
+```
+
+```Text
+#如果是python2，在登录前需要先指定下字符集为utf-8，因为默认是ascii；如果是python3，该步骤可以忽略
+Evaluate    reload(sys)    modules=sys
+Evaluate    sys.setdefaultencoding("utf-8")    modules=sys
+#设置linux提示符，默认为]$，如果非该提示符的环境，需要进行设置，否则可以忽略
+set prompt    ]#
+#输入pin和token登录机器，支持传入部署目录
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}
+#ssh免密，后面所有ssh和scp操作都免密
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}    no_password=True
+#登录机器后su到指定用户
+login use token    ${jump_host}    ${jump_user}    ${login_ip}    ${login_user}    ${login_pwd}    ${login_pin}${token}    dir_deploy=${dir_deploy}    su_user=${su_user}    su_password=${su_password}
+#不需要pin和token登录机器
+login normal    ${login_ip}    ${login_user}    ${login_pwd}    dir_deploy=${dir_deploy}
+```
 ### 2.	清理环境—clean
 ```
 #清理登录的当前机器，会清理autotest整个目录
@@ -292,7 +324,7 @@ remove node data    ip_list=ip,user,password     ext=node0
 start node    ip_list=ip,user,password     ext=node0
 ```
 ### 15.	操作配置文件—opt autotest ini/opt cfg for fisco bcos
-opt autotest ini：读取、修改windows文件autotest.ini。
+opt autotest ini：读取、修改windows文件autotest.ini。<br/>
 opt cfg for fisco bcos：修改linux配置文件
 ```
 #操作 autotest.ini，该文件放在windows上，和当前Suite在一个目录
@@ -382,9 +414,9 @@ ImportError: No module named configparser<br/>
  
 ### FOR loop contains no keywords
 错误提示信息：<br/>
-20210316 15:58:13.651 :  INFO : ***************check log of g2***************
-20210316 15:58:13.652 :  FAIL : FOR loop contains no keywords.
-20210316 15:58:13.653 :  FAIL : AssertionError
+20210316 15:58:13.651 :  INFO : ***************check log of g2***************<br/>
+20210316 15:58:13.652 :  FAIL : FOR loop contains no keywords.<br/>
+20210316 15:58:13.653 :  FAIL : AssertionError<br/>
 Ending test:   Test.Mark.环境搭建.检查各节点g1g2共识日志++<br/>
 
 解决办法：在FOR循环语句结束行加上关键字END
