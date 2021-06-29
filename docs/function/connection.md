@@ -84,12 +84,12 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 ## 客户端与节点连接配置
 FISCO BCOS区块链对外提供了接口，外部应用可通过FISCO BCOS的SDK来调用这些接口。客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。<br/>
 
-客户端侧的直连节点配置包括IP、Port以及证书：<br/>
-- [network]: 配置节点的IP、Port信息。可配置同一机构下的一个或多个节点，对应节点的channel_listen_ip和channel_listen_port。
-- [cryptoMaterial]: 配置证书路径。若客户端跟节点间是国密连接，默认从conf/gm目录加载相关证书；若是非国密连接，默认从conf目录加载相关证书，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时再次尝试用国密连接try to use SM sslContext。
+客户端侧的直连节点配置包括IP、Port以及证书：
 ```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
 [cryptoMaterial]
+# 配置证书路径。非国密ssl连接默认从conf目录加载相关证书，国密ssl连接默认从conf/gm目录加载证书。证书路径支持自定义
+# 当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时再次尝试用国密连接try to use SM sslContext。
 
 certPath = "conf"                           # The certification path  
 
@@ -108,8 +108,9 @@ certPath = "conf"                           # The certification path
 
 # enSslKey = "conf/gm/gmensdk.key"          # GM ssl cert file path
                                             # default load the GM SSL encryption privateKey from ${certPath}/gm/gmensdk.key
-
+                                            
 [network]
+# 配置节点的IP、Port信息。可配置同一机构下的一个或多个节点，对应节点的channel_listen_ip和channel_listen_port。
 peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connect
 ```
 
@@ -151,7 +152,7 @@ peers=["172.16.153.29:20810","172.16.153.21:20811"]    # The peer list to connec
     - 默认sdk_allowlist列表数目为0，任意SDK均可访问节点的该群组。
     - 配置好sdk_allowlist后，执行bash node0/scripts/reload_sdk_allowlist.sh脚本，不重启节点可使配置生效。
     - sdk_allowlist中有配置public_key，在sdk_allowlist中的客户端能成功访问对应的群组。
-    - sdk_allowlist中有配置public_key，不在sdk_allowlist中的客户端访问群组会有诸如The SDK is not allowed to access this group类似错误提示信息。
+    - sdk_allowlist中有配置public_key，不在sdk_allowlist中的客户端访问群组失败。
     - 节点有g1、g2群组，其中g1的sdk_allowlist中有配置public_key，不在sdk_allowlist中的客户端不能访问g1群组，但能访问g2群组。<br/><br/>
 
 实际现网运行的生产环境比测试环境要复杂很多，影响环境的因素众多，可能会遇到诸如网络抖动、节点各种异常等情况出现。无法完全避免各种异常的发生，但当各种故障解除后，系统应该能快速恢复可以正常使用。
