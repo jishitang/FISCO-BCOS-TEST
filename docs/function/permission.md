@@ -18,6 +18,7 @@ grantCommitteeMember、revokeCommitteeMember用于添加、删除委员。<br/>
 
 ## grantOperator
 grantOperator、revokeOperator用于添加、删除运维账号。运维角色拥有部署合约、创建用户表和管理CNS的权限。<br/>
+
 测试点：
 1. 必须是委员才能添加、删除运维账号，其他角色无权限添加、删除运维账号。
 2. 对账户赋予运维权限后，会默认给该账号添加DeployAndCreateManager、CNSManager权限。
@@ -62,6 +63,7 @@ Empty set.
  ```
 ## grantCNSManager
 grantCNSManager、revokeCNSManager用于给账户添加、删除使用CNS的权限（指deployByCNS和registerCNS，callByCNS和queryCNS不受该权限控制）。<br/>
+
 测试点：
 1. 初始时所有账号都可以deployByCNS、registerCNS。
 2. 存在CNSManager后，仅CNSManager可以deployByCNS、registerCNS。其他账号无权限。
