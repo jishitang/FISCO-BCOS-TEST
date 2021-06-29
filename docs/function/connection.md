@@ -85,7 +85,7 @@ fisco-bco 40752 lifang   54u  IPv4 144801577      0t0  TCP VM_153_29_centos:2080
 FISCO BCOS区块链对外提供了接口，外部应用可通过FISCO BCOS的SDK来调用这些接口。客户端与节点的连接主要包括各种APP、sdk、console与节点的连接。<br/>
 
 客户端侧的直连节点配置包括IP、Port以及证书：<br/>
-- [network]: 配置节点的IP、Port信息。可配置同一机构下的一个或多个节点，对应节点的channel_listen_ip和channel_listen_port。<br/>
+- [network]: 配置节点的IP、Port信息。可配置同一机构下的一个或多个节点，对应节点的channel_listen_ip和channel_listen_port。
 - [cryptoMaterial]: 配置证书路径。若客户端跟节点间是国密连接，默认从conf/gm目录加载相关证书；若是非国密连接，默认从conf目录加载相关证书，证书和key存放路径可自定义。当前java SDK/console版本已支持自动识别ssl加密类型，会先尝试非国密连接connManager with ECDSA sslContext，非国密连接失败时再次尝试用国密连接try to use SM sslContext。
 ```Bash
 [lifang@master-153-45 conf]$ cat config.toml 
