@@ -10,3 +10,4 @@
    mysqlDirRemove.md
    mysqlAcessDenied.md
    grafana.md
+   dockerDirRemove.md
