@@ -37,6 +37,12 @@ systemctl enable docker
 ```
 ## 检查Docker Root Dir参数值
 docker info命令查看Docker Root Dir参数值是否正确。
+```Bash
+[root@VM_108_46_centos lib]# docker info|grep 'Docker Root Dir'
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+ Docker Root Dir: /data/docker1/lib/docker
+```
 ## 删除旧目录/var/lib/docker/
 启动之后确认docker 没有问题，删除旧的/var/lib/docker/目录，到此迁移docker目录工作结束。
 
