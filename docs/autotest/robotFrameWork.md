@@ -80,7 +80,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 Test Log中会记录每个用例的具体执行日志信息：
 ![](../../images/others/robot13.png)
 
-## Autolink调度页面（Todo）
+## Autolink调度页面
 通过ride工具只能在本地机器执行用例，不便于共享用例和多人执行。基于此可以搭建一个Autolink平台，只要能访问autolink服务器，就可以登录平台执行用例。
 
 ### Autolink搭建
