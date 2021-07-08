@@ -84,15 +84,85 @@ Test Log中会记录每个用例的具体执行日志信息：
 通过ride工具只能在本地机器执行用例，不便于共享用例和多人执行。基于此可以搭建一个Autolink平台，只要能访问autolink服务器，就可以登录平台执行用例。
 
 ### Autolink搭建
+#### 上传软件包
+建议Autolink的运行环境为python3.7.9，不支持python2。
+将AutoLink压缩包上传到linux服务器，然后解压。
 
+#### 安装依赖
+```Bash
+进入AutoLink目录
+cd AutoLink
+安装依赖，如果网速很慢，可以加上国内镜像 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
+pip install -r requirements.txt
+```
+#### 配置
+```Bash
+进入auto目录
+cd auto
+根据实际情况修改以下配置
+##如果当前机器python命令即为python3版本，这里配置成python即可
+ROBOT_PYTHON_CMD = "python3"
+本机IP
+SERVER_IP = "11.22.33.44"
+服务默认端口，无需修改
+SERVER_PORT = "8000"
+```
+#### 启动服务
+```Bash
+进入AutoLink目录
+cd AutoLink
+sh start.sh
+```
+
+#### 停止服务
+```Bash
+进入AutoLink目录
+cd AutoLink
+sh stop.sh
+```
 ### Autolink使用
+Autolink主要包括如下几个模块:<br/>
+系统管理：新增、删除登陆用户。<br/>
+调度管理：配置定时任务信息。<br/>
+任务执行模块：配置version、branch参数，触发用例执行。<br/>
+
 #### 登录用户创建
+用AutoLink/123456预置用户登录系统，进入系统管理新增，填写相关信息后，点击创建：
+![](../../images/others/autolink1.png)
 
 #### 用例文件上传
+步骤1.选中页面左侧根目录，右键选择创建项目：
+![](../../images/others/autolink2.png)
+
+步骤2.选中上一步创建的项目，右键选择创建目录：
+![](../../images/others/autolink3.png)
+
+步骤3.选中上一步创建的目录，右键选择上传文件，上传用例和依赖的测试文件：
+![](../../images/others/autolink4.png)
+
+需要上传的文件包括：<br/>
+autotest_resource_token.robot：变量存储文件<br/>
+AutoTestLibrary.py：关键字定义的代码文件<br/>
+*.robot：用例文件<br/>
+
+#### 全局变量配置
+通过Autolink执行用例时，定义了5个全局变量便于从界面直接传入参数，输入参数后，点击保存参数即可：
+![](../../images/others/autolink5.png)
+
+使用Autolink执行用例时，需要确保如下部分保持一致：
+![](../../images/others/autolink6.png)
+
+#### 执行结果通知配置
+支持通过邮箱和行内IMS监控发送用例结果通知，配置方法见下图：
+![](../../images/others/autolink7.png)
 
 #### 用例执行
+点击运行，就会运行上传的所有用例。
+![](../../images/others/autolink8.png)
 
 #### 定时任务调度
+Autolink也支持定时任务调度执行。定时任务配置方式如下（其中表达式填写要求满足linux中Cron表达式规则）：
+![](../../images/others/autolink9.png)
 
 ## 附-内置关键字
 存储变量时，如果想对现有结果做一定处理或者获取特殊值，以下内置函数可以直接使用，使用时需要带上前缀“self.”。
