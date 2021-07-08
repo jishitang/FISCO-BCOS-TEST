@@ -90,33 +90,33 @@ Test Log中会记录每个用例的具体执行日志信息：
 
 #### 安装依赖
 ```Bash
-进入AutoLink目录
+#进入AutoLink目录
 cd AutoLink
-安装依赖，如果网速很慢，可以加上国内镜像 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
+#安装依赖，如果网速很慢，可以加上国内镜像 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
 pip install -r requirements.txt
 ```
 #### 配置
 ```Bash
-进入auto目录
+#进入auto目录
 cd auto
-根据实际情况修改以下配置
-##如果当前机器python命令即为python3版本，这里配置成python即可
+#根据实际情况修改以下配置
+#如果当前机器python命令即为python3版本，这里配置成python即可
 ROBOT_PYTHON_CMD = "python3"
-本机IP
+#本机IP
 SERVER_IP = "11.22.33.44"
-服务默认端口，无需修改
+#服务默认端口，无需修改
 SERVER_PORT = "8000"
 ```
 #### 启动服务
 ```Bash
-进入AutoLink目录
+#进入AutoLink目录
 cd AutoLink
 sh start.sh
 ```
 
 #### 停止服务
 ```Bash
-进入AutoLink目录
+#进入AutoLink目录
 cd AutoLink
 sh stop.sh
 ```
