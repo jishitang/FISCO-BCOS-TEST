@@ -5,5 +5,6 @@
 
 .. toctree::
    :hidden:
-
+   
+   perfScope.md
    Java_sdk_demo.md
