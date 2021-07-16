@@ -4,6 +4,6 @@
 本章节从兼容性角度分析FISCO BCOS测试点。
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
    compatibility.md
