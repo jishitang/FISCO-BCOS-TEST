@@ -4,7 +4,8 @@
 本章节介绍版本性能测试相关内容。
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
    
    perfScope.md
+   pressure.md
    Java_sdk_demo.md
