@@ -9,16 +9,17 @@
 为了让自动化用例编写时更加直观，更容易理解，此次根据fisco-bcos测试的独有特性，在robot framework框架下定制了一套符合FISCO-BCOS测试的一些关键字，使用者需要熟悉FISCO-BCOS底层测试的相关业务，熟悉robot framework内置关键字和定制的FISCO-BCOS专有关键字。<br/>
 
 ## 用例编辑工具Ride
+### 环境准备
 Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https://github.com/robotframework/RIDE/wiki)。需要做如下安装（推荐使用Python3）。
 
-### 安装（Python2）
+#### 安装（Python2）
 - 安装python：[2.7.18版本](https://www.python.org/downloads/release/python-2718/)
 - 安装robotframework：pip install robotframework==3.2.2
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
 - 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
 - 安装configparser：pip install configparser==5.0.1
 
-### 安装（Python3）
+#### 安装（Python3）
 - 安装python：[3.7.9版本](https://www.python.org/downloads/release/python-379/)
 - 安装robotframework：pip install robotframework==3.2.2
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
@@ -26,18 +27,18 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 - 安装configparser：pip install configparser==5.0.1
 注：如果pip install安装太慢可以采用国内镜像，既加上参数 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
 
-## 创建测试用例
+### 创建测试用例
 可以直接在ride工具导入已有项目的用例：File->Open Directory（选择项目目录）。也可以新建用例，如下是新建用例的步骤。
 
-### 步骤1.创建项目：File->New Project，Type选择Directory：
+##### 步骤1.创建项目：File->New Project，Type选择Directory：
 ![](../../images/others/robot2.png)
 
 
-### 步骤2.创建Suite：选中项目名，右键->New Suite：
+##### 步骤2.创建Suite：选中项目名，右键->New Suite：
 ![](../../images/others/robot3.png)
 
 
-### 步骤3.创建变量文件（存放所有全局变量的文件），选中项目名，右键->New Resource：
+##### 步骤3.创建变量文件（存放所有全局变量的文件），选中项目名，右键->New Resource：
 ![](../../images/others/robot4.png)
 
 变量文件里面可以新增变量和自定义关键字：
@@ -52,12 +53,12 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 变量Resource文件中需要导入如下3个定制文件（文件中定义了fisco bcos的关键字）：
 ![](../../images/others/robot8.png)
 
-### 步骤4.创建一个测试用例：选中Suite，右键->New Test Case，用例步骤设计参见下节。
+##### 步骤4.创建一个测试用例：选中Suite，右键->New Test Case，用例步骤设计参见下节。
 
-### 步骤5.用例侧导入变量Resource文件：
+##### 步骤5.用例侧导入变量Resource文件：
 ![](../../images/others/robot9.png)
 
-## 用例结构
+### 用例结构
 用例组成如下，具体可参考[官网描述](http://robotframework.org/robotframework/2.7.2/RobotFrameworkUserGuide.html#test-case-name-and-documentation)。
 ![](../../images/others/robot10.png)
 
@@ -69,18 +70,18 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 - Tags：给测试用例添加标签。可以从特性维度、用例难易程度等维度给测试用例添加Tag，执行用例时可选择仅执行有对应标签的用例。
 - 用例步骤：具体的用例执行步骤，表格式语法，格式：关键字 参数1 参数2；输出变量 关键字 参数1 参数2。
 
-## 用例执行
+### 用例执行
 可以直接在Ride工具中的用例目录上面选中相关用例，然后F8执行。也可以根据用例标签执行指定用例。
 ![](../../images/others/robot11.png)
 
-## 用例报告
+### 用例报告
 用例执行完成后可以生成html格式的Test Report和Test Log。
 ![](../../images/others/robot12.png)
 
 Test Log中会记录每个用例的具体执行日志信息：
 ![](../../images/others/robot13.png)
 
-## Autolink调度页面
+## Autolink调度平台
 通过ride工具只能在本地机器执行用例，不便于共享用例和多人执行。基于此可以搭建一个Autolink平台，只要能访问autolink服务器，就可以登录平台执行用例。
 
 ### Autolink搭建
