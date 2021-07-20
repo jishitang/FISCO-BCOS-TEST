@@ -7,5 +7,6 @@
    :maxdepth: 1
    
    perfScope.md
+   longTermStability.md
    pressure.md
    Java_sdk_demo.md
