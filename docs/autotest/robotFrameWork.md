@@ -9,7 +9,7 @@
 为了让自动化用例编写时更加直观，更容易理解，此次根据fisco-bcos测试的独有特性，在robot framework框架下定制了一套符合FISCO-BCOS测试的一些关键字，使用者需要熟悉FISCO-BCOS底层测试的相关业务，熟悉robot framework内置关键字和定制的FISCO-BCOS专有关键字。<br/>
 
 ## 用例编辑工具Ride
-### 环境准备
+### 1.环境准备
 Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https://github.com/robotframework/RIDE/wiki)。需要做如下安装（推荐使用Python3）。
 
 #### 安装（Python2）
@@ -27,7 +27,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 - 安装configparser：pip install configparser==5.0.1
 注：如果pip install安装太慢可以采用国内镜像，既加上参数 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
 
-### 创建测试用例
+### 2.创建测试用例
 可以直接在ride工具导入已有项目的用例：File->Open Directory（选择项目目录）。也可以新建用例，如下是新建用例的步骤。
 
 ##### 步骤1.创建项目：File->New Project，Type选择Directory：
@@ -58,7 +58,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 ##### 步骤5.用例侧导入变量Resource文件：
 ![](../../images/others/robot9.png)
 
-### 用例结构
+### 3.用例结构
 用例组成如下，具体可参考[官网描述](http://robotframework.org/robotframework/2.7.2/RobotFrameworkUserGuide.html#test-case-name-and-documentation)。
 ![](../../images/others/robot10.png)
 
@@ -70,11 +70,11 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 - Tags：给测试用例添加标签。可以从特性维度、用例难易程度等维度给测试用例添加Tag，执行用例时可选择仅执行有对应标签的用例。
 - 用例步骤：具体的用例执行步骤，表格式语法，格式：关键字 参数1 参数2；输出变量 关键字 参数1 参数2。
 
-### 用例执行
+### 4.用例执行
 可以直接在Ride工具中的用例目录上面选中相关用例，然后F8执行。也可以根据用例标签执行指定用例。
 ![](../../images/others/robot11.png)
 
-### 用例报告
+### 5.用例报告
 用例执行完成后可以生成html格式的Test Report和Test Log。
 ![](../../images/others/robot12.png)
 
@@ -84,7 +84,7 @@ Test Log中会记录每个用例的具体执行日志信息：
 ## Autolink调度平台
 通过ride工具只能在本地机器执行用例，不便于共享用例和多人执行。基于此可以搭建一个Autolink平台，只要能访问autolink服务器，就可以登录平台执行用例。
 
-### Autolink搭建
+### 1.Autolink搭建
 ##### 步骤1.上传软件包
 建议Autolink的运行环境为python3.7.9，不支持python2。
 将AutoLink压缩包上传到linux服务器，然后解压。
@@ -119,14 +119,14 @@ cd AutoLink
 sh stop.sh
 ```
 
-### Autolink使用
+### 2.Autolink使用
 Autolink主要包括如下几个模块:<br/>
 系统管理：新增、删除登陆用户。<br/>
 调度管理：配置定时任务信息。<br/>
 任务执行模块：配置version、branch参数，触发用例执行。<br/>
 
 ##### 登录用户创建
-用AutoLink/123456预置用户登录系统，进入系统管理，点击新增，填写相关信息后，点击创建：
+用AutoLink/123456预置用户登录系统http://10.107.105.106:8000/，进入系统管理，点击新增，填写相关信息后，点击创建：
 ![](../../images/others/autolink1.png)
 
 ##### 用例文件上传
@@ -159,6 +159,15 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 点击运行，就会运行上传的所有用例。
 ![](../../images/others/autolink8.png)
 
+.. admonition:: 注意
+   - 当前所有的robotFrameWork自动化用例包括java-sdk-demo，console和python-sdk3种接入方式。
+   - 目前上传到Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：
+   autotest：所有的用例
+   auto_python：python-sdk的用例
+   auto_console：console的用例
+   auto_java:java-sdk-demo的用例
+   - 各用户的用例和全局变量文件是相互隔离的，但上传的全局变量配置文件autotest_resource_token.robot中使用的同一套服务器，因此上述用户需要同时执行自动化用例时，需要先修改autotest_resource_token.robot中服务器相关变量值。
+   
 ##### 定时任务调度
 Autolink也支持定时任务调度执行。定时任务配置方式如下（其中表达式填写要求满足linux中Cron表达式规则）：
 ![](../../images/others/autolink9.png)
