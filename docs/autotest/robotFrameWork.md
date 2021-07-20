@@ -152,13 +152,13 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 点击运行，就会运行上传的所有用例。
 ![](../../images/others/autolink8.png)
 
-###### <font color=#B22222>注意</font>
+###### <font color=#B22222>注:</font>
 - <font color=#1E90FF>目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。</font>
 - <font color=#1E90FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font>
 <font color=#1E90FF>autotest：所有的用例</font><br/>
-<font color=#1E90FF>auto_python：python-sdk的用例</font><br/>
+<font color=#1E90FF>auto_python_sdk：python-sdk的用例</font><br/>
 <font color=#1E90FF>auto_console：console的用例</font><br/>
-<font color=#1E90FF>auto_java：java-sdk-demo的用例</font><br/>
+<font color=#1E90FF>auto_java_sdk：java-sdk-demo的用例</font><br/>
 - <font color=#1E90FF>各用户下的用例和全局变量是相互隔离的，但上传的全局变量文件autotest_resource_token.robot中使用的同一套服务器，因此上述用户若需要同时执行自动化用例，需要先修改autotest_resource_token.robot中服务器相关变量值。</font>
    
 ##### 定时任务调度
