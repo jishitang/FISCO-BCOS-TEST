@@ -10,21 +10,13 @@
 
 ## 用例编辑工具Ride
 ### 1.环境准备
-Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https://github.com/robotframework/RIDE/wiki)。需要做如下安装（推荐使用Python3）。
+Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https://github.com/robotframework/RIDE/wiki)。需要做如下安装（推荐使用Python3）。<br/>
 
-#### 安装（Python2）
-- 安装python：[2.7.18版本](https://www.python.org/downloads/release/python-2718/)
+- 安装python3：[3.7.9版本](https://www.python.org/downloads/release/python-379/)
 - 安装robotframework：pip install robotframework==3.2.2
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
 - 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
-- 安装configparser：pip install configparser==5.0.1
-
-#### 安装（Python3）
-- 安装python：[3.7.9版本](https://www.python.org/downloads/release/python-379/)
-- 安装robotframework：pip install robotframework==3.2.2
-- 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
-- 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
-- 安装configparser：pip install configparser==5.0.1
+- 安装configparser：pip install configparser==5.0.1<br/>
 注：如果pip install安装太慢可以采用国内镜像，既加上参数 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
 
 ### 2.创建测试用例
