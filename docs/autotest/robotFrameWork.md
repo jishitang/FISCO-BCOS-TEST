@@ -160,14 +160,14 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 ![](../../images/others/autolink8.png)
 
 ```eval_rst
-.. note::
-   - 当前所有的robotFrameWork自动化用例包括java-sdk-demo，console和python-sdk3种接入方式。
-   - 目前上传到Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：
+.. 注::
+   - 目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。
+   - Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：
        - autotest：所有的用例
        - auto_python：python-sdk的用例
        - auto_console：console的用例
-       - auto_java:java-sdk-demo的用例
-   - 各用户的用例和全局变量文件是相互隔离的，但上传的全局变量配置文件autotest_resource_token.robot中使用的同一套服务器，因此上述用户需要同时执行自动化用例时，需要先修改autotest_resource_token.robot中服务器相关变量值。
+       - auto_java：java-sdk-demo的用例
+   - 各用户下的用例和全局变量是相互隔离的，但上传的全局变量文件autotest_resource_token.robot中使用的同一套服务器，因此上述用户若需要同时执行自动化用例，需要先修改autotest_resource_token.robot中服务器相关变量值。
 ```
    
 ##### 定时任务调度
