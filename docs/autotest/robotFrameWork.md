@@ -17,6 +17,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 - 安装robotframework-ride：pip install robotframework-ride==1.7.4.2（会提示在桌面创建快捷方式）
 - 安装robotframework-SSHLibrary：pip install robotframework-SSHLibrary==3.6.0
 - 安装configparser：pip install configparser==5.0.1<br/>
+
 注：如果pip install安装太慢可以采用国内镜像，既加上参数 -i https://pypi.douban.com/simple --trust -host=pypi.douban.com
 
 ### 2.创建测试用例
@@ -151,16 +152,16 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 点击运行，就会运行上传的所有用例。
 ![](../../images/others/autolink8.png)
 
-```eval_rst
-.. 注::
+
+- **注意**
+- <font color=#87CEFA>目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。</font>
    - 目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。
    - Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：
-       - autotest：所有的用例
-       - auto_python：python-sdk的用例
-       - auto_console：console的用例
-       - auto_java：java-sdk-demo的用例
+autotest：所有的用例<br/>
+auto_python：python-sdk的用例<br/>
+auto_console：console的用例<br/>
+auto_java：java-sdk-demo的用例<br/>
    - 各用户下的用例和全局变量是相互隔离的，但上传的全局变量文件autotest_resource_token.robot中使用的同一套服务器，因此上述用户若需要同时执行自动化用例，需要先修改autotest_resource_token.robot中服务器相关变量值。
-```
    
 ##### 定时任务调度
 Autolink也支持定时任务调度执行。定时任务配置方式如下（其中表达式填写要求满足linux中Cron表达式规则）：
