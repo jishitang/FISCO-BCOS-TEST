@@ -187,13 +187,17 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 点击运行，就会按顺序运行上传的所有用例。
 ![](../../images/others/autolink8.png)
 
+运行后，需要点击刷新按钮，下方才会出现本次任务，选中本次任务，点击显示日志，在下图中 已执行的用例名 处会按序显示当前已经执行过的所有用例。在 执行日志 区域可以实时显示用例执行日志。
+![](../../images/others/autolink10.png)
+
 ###### <font color=#0000FF>注:</font>
 - <font color=#0000FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font><br/>
-<font color=#0000FF>autotest：所有的用例</font><br/>
-<font color=#0000FF>auto_python_sdk：python-sdk的用例</font><br/>
-<font color=#0000FF>auto_console：console的用例</font><br/>
-<font color=#0000FF>auto_java_sdk：java-sdk-demo的用例</font><br/>
-- <font color=#0000FF>各用户的用例相互隔离，互不影响，但若需同时执行，需先修改全局变量文件中服务器配置，确保不是操作的同一套环境。</font>
+<font color=#0000FF>autotest用户：所有的用例，使用自动化环境1</font><br/>
+<font color=#0000FF>auto_python_sdk用户：python-sdk的用例，使用自动化环境2</font><br/>
+<font color=#0000FF>auto_console用户：console的用例，使用自动化环境2</font><br/>
+<font color=#0000FF>auto_java_sdk用户：java-sdk-demo的用例，使用自动化环境2</font><br/>
+
+- <font color=#0000FF>各用户下的用例互不影响，但若需同时执行，需先修改全局变量文件中服务器配置，确保不是操作的同一套环境。</font>
    
 ##### 定时任务调度
 Autolink也支持定时任务调度执行。定时任务配置方式如下（其中表达式填写要求满足linux中Cron表达式规则）：
