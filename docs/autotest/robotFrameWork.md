@@ -59,7 +59,6 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 |${login_ip}      | 172.xx.xxx.4 |   console、java-sdk-demo、python-sdk所在服务器IP|
 |${login_user}     |lifang |   登录${login_ip}的用户名|
 |${login_pwd}     | Aa12345!|    ${login_user}的密码|
-|${dir_deploy}   |  /data/home/fangli|  部署目录|
 |${ip_conf} | 172.xx.xxx.1:1 agency1 1,2\|172.xx.xxx.1:1 agency1 1\|<br/>  172.xx.xxx.2:1 agency1 1,2\|172.xx.xxx.3:1 agency2 1\|<br/>  172.xx.xxx.3:1 agency2 1\|172.xx.xxx.3:1 agency2 1,2\|<br/>  172.xx.xxx.4:1 agency3 1,2 | build_chain时需要的ipconf信息|
 |${ip_list}|172.xx.xxx.1,${su_user},${su_pwd},${port}\|172.xx.xxx.2,${su_user},${su_pwd},${port}\|<br/>  172.xx.xxx.3,${su_user},${su_pwd},${port}\|172.xx.xxx.4,${su_user},${su_pwd},${port} |  节点的ip列表,多个节点在同一服务器，只需填写一次|
 |${build_chain_ext}  |  -T -i -p 30804,30815,8310 |  调用build_chain.sh所需的参数列表|
@@ -182,8 +181,8 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 ![](../../images/others/autolink8.png)
 
 ###### <font color=#B22222>注:</font>
-- <font color=#0000FF>目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。</font>
-- <font color=#0000FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font>
+- <font color=#0000FF>目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。</font><br/>
+- <font color=#0000FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font><br/>
 <font color=#0000FF>autotest：所有的用例</font><br/>
 <font color=#0000FF>auto_python_sdk：python-sdk的用例</font><br/>
 <font color=#0000FF>auto_console：console的用例</font><br/>
