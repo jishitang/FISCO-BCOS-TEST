@@ -48,6 +48,15 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 
 
 ###### <font color=#B22222>与环境配置相关的变量如下：</font>
+|故障级别             |描述       |错误内容举例           |
+|:---------------:|:-------------|:-----------|
+|${login_ip}|172.xx.xxx.4|console、java-sdk-demo、python-sdk所在服务器IP|
+
+
+
+
+
+
 |变量名             |变量值示例|备注          |
 |:---------------|:-----------|:-----------|
 |${login_ip}      | 172.xx.xxx.4 |   console、java-sdk-demo、python-sdk所在服务器IP|
