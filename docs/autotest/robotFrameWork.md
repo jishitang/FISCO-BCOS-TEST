@@ -7,6 +7,13 @@
 - Robot Framework用例执行完成后，可提供易于阅读的HTML格式的Test Report和Test Log。 
 - Robot Framework提供Tags标记以分类和选择要执行的测试用例。 
 为了让自动化用例编写时更加直观，更容易理解，此次根据fisco-bcos测试的独有特性，在robot framework框架下定制了一套符合FISCO-BCOS测试的一些关键字，使用者需要熟悉FISCO-BCOS底层测试的相关业务，熟悉robot framework内置关键字和定制的FISCO-BCOS专有关键字。<br/>
+
+## 测试范围
+目前基于robotFrameWork的自动化用例主要是如下基础场景：<br/>
+- java-sdk-demo：4种合约压测，3f+1对压测影响
+- console：所有的console命令
+- python-sdk：所有python-sdk命令
+
 ## 测试组网
 自动化环境一共有A、B、C、D、E、F、G 7个节点，2个group，其中g1有7个节点（A、B、C、D、E、F、G）,g2有4个节点（A、C、F、G）。正常情况下，节点间是两两网络互通的。<br/>
 
