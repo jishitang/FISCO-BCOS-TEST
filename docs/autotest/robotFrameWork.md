@@ -47,7 +47,7 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 ![](../../images/others/robot8.png)
 
 
-###### <font color=#B22222>与环境配置相关的变量如下：</font>
+###### <font color=#B22222>若需更改自动化服务器，需要修改与环境配置相关的如下全局变量：</font>
 
 |变量名             |变量值示例|备注          |
 |:---------------|:-----------|:-----------|
@@ -55,8 +55,8 @@ Robot Framework框架支持多种用例编辑工具，本次选择[Ride](https:/
 |${login_user}     |lifang |   登录${login_ip}的用户名|
 |${login_pwd}     | Aa12345!|    ${login_user}的密码|
 |${dir_deploy}   |  /data/home/fangli|  部署目录|
-|${ip_conf} | 172.xx.xxx.1:1 agency1 1,2\|172.xx.xxx.1:1 agency1 1\|172.xx.xxx.2:1 agency1 1,2\|172.xx.xxx.3:1 agency2 1\|172.xx.xxx.3:1 agency2 1\|172.xx.xxx.3:1 agency2 1,2\|172.xx.xxx.4:1 agency3 1,2 | build_chain时需要的ipconf信息|
-|${ip_list}|172.xx.xxx.1,${su_user},${su_pwd},${port}\|172.xx.xxx.2,${su_user},${su_pwd},${port}\|172.xx.xxx.3,${su_user},${su_pwd},${port}\|172.xx.xxx.4,${su_user},${su_pwd},${port} |  节点的ip列表,多个节点在同一服务器，只需填写一次|
+|${ip_conf} | 172.xx.xxx.1:1 agency1 1,2\|172.xx.xxx.1:1 agency1 1\|<br/>  172.xx.xxx.2:1 agency1 1,2\|172.xx.xxx.3:1 agency2 1\|<br/>  172.xx.xxx.3:1 agency2 1\|172.xx.xxx.3:1 agency2 1,2\|<br/>  172.xx.xxx.4:1 agency3 1,2 | build_chain时需要的ipconf信息|
+|${ip_list}|172.xx.xxx.1,${su_user},${su_pwd},${port}\|172.xx.xxx.2,${su_user},${su_pwd},${port}\|<br/>  172.xx.xxx.3,${su_user},${su_pwd},${port}\|172.xx.xxx.4,${su_user},${su_pwd},${port} |  节点的ip列表,多个节点在同一服务器，只需填写一次|
 |${build_chain_ext}  |  -T -i -p 30804,30815,8310 |  调用build_chain.sh所需的参数列表|
 |${conf_ip} |       172.xx.xxx.3:30815,172.xx.xxx.1:30816| 控制台、java-sdk配置的直连节点|
 |@{g2_node_list} |   node0    node0    node2    node0 | g2群组的node序号，按环境组网中A/C/F/G顺序填写|
