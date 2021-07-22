@@ -187,8 +187,7 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 点击运行，就会按顺序运行上传的所有用例。
 ![](../../images/others/autolink8.png)
 
-###### <font color=#B22222>注:</font>
-- <font color=#0000FF>目前的robotFrameWork自动化用例包括java-sdk-demo、console、python-sdk。</font><br/>
+###### <font color=#0000FF>注:</font>
 - <font color=#0000FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font><br/>
 <font color=#0000FF>autotest：所有的用例</font><br/>
 <font color=#0000FF>auto_python_sdk：python-sdk的用例</font><br/>
