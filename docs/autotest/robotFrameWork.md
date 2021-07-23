@@ -194,8 +194,8 @@ AutoTestLibrary.py：关键字定义的代码文件<br/>
 - <font color=#0000FF>Autolink平台的用例分布在如下几个用户中(登录密码同用户名)：</font><br/>
 <font color=#0000FF>autotest用户：所有的用例，使用自动化环境1</font><br/>
 <font color=#0000FF>auto_python_sdk用户：python-sdk的用例，使用自动化环境2</font><br/>
-<font color=#0000FF>auto_console用户：console的用例，使用自动化环境2</font><br/><br/>
-<font color=#0000FF>auto_java_sdk用户：java-sdk-demo的用例，使用自动化环境2</font><br/>
+<font color=#0000FF>auto_console用户：console的用例，使用自动化环境2</font><br/>
+<font color=#0000FF>auto_java_sdk用户：java-sdk-demo的用例，使用自动化环境2</font><br/><br/>
 
 - <font color=#0000FF>各用户下的用例互不影响，但若需同时执行，需先修改全局变量文件中服务器配置，确保不是操作的同一套环境。</font>
    
